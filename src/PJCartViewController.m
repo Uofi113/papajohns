@@ -192,6 +192,17 @@ static NSString * const kCartCellID = @"PJCartCell";
 - (void)_placeOrder {
     if ([PJCartManager sharedManager].totalCount == 0) return;
 
+    if ([PJCartManager sharedManager].totalPrice < 600.f) {
+        UIAlertView *alert = [[UIAlertView alloc]
+            initWithTitle:@"\u041c\u0438\u043d\u0438\u043c\u0430\u043b\u044c\u043d\u0430\u044f \u0441\u0443\u043c\u043c\u0430 \u0437\u0430\u043a\u0430\u0437\u0430"
+                  message:@"\u041c\u0438\u043d\u0438\u043c\u0430\u043b\u044c\u043d\u0430\u044f \u0441\u0443\u043c\u043c\u0430 \u0437\u0430\u043a\u0430\u0437\u0430 \u0434\u043b\u044f \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0438 \u0441\u043e\u0441\u0442\u0430\u0432\u043b\u044f\u0435\u0442 600 \u0440\u0443\u0431."
+                 delegate:nil
+        cancelButtonTitle:@"OK"
+        otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+
     // Build order summary
     NSMutableString *summary = [NSMutableString stringWithString:@"\u0412\u0430\u0448 \u0437\u0430\u043a\u0430\u0437:\n"];
     for (PJCartItem *ci in [PJCartManager sharedManager].cartItems) {
