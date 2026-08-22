@@ -51,16 +51,13 @@
     [self.view.layer insertSublayer:nl atIndex:1];
 
     // ── Логотип ──────────────────────────────────────────────────────────
-    UILabel *logo = [[UILabel alloc] initWithFrame:CGRectMake(20.f, 80.f, W - 40.f, 56.f)];
-    logo.text          = @"🍕  Papa John's";
-    logo.font          = [UIFont boldSystemFontOfSize:30.f];
-    logo.textColor     = [UIColor whiteColor];
-    logo.textAlignment = NSTextAlignmentCenter;
-    logo.shadowColor   = [UIColor colorWithWhite:0.f alpha:0.5f];
-    logo.shadowOffset  = CGSizeMake(0.f, 2.f);
-    [self.view addSubview:logo];
+    UIImageView *logoView = [[UIImageView alloc] initWithFrame:CGRectMake(20.f, 60.f, W - 40.f, 70.f)];
+    logoView.contentMode = UIViewContentModeScaleAspectFit;
+    logoView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"logo" ofType:@"png"]];
+    [self.view addSubview:logoView];
 
     UILabel *hint = [[UILabel alloc] initWithFrame:CGRectMake(20.f, 140.f, W - 40.f, 20.f)];
+    hint.backgroundColor = [UIColor clearColor];
     hint.text          = @"Войдите, чтобы оформить заказ";
     hint.font          = [UIFont systemFontOfSize:13.f];
     hint.textColor     = [UIColor colorWithWhite:1.f alpha:0.55f];
