@@ -1,4 +1,4 @@
-﻿export ARCHS = armv7 armv7s
+export ARCHS = armv7 armv7s
 export TARGET = iphone:clang:6.0:4.3
 
 include $(THEOS)/makefiles/common.mk
@@ -9,9 +9,15 @@ PapaJohns_FILES = src/main.m \
                   src/AppDelegate.m \
                   src/PJNetworkManager.m \
                   src/PJMenuItem.m \
-                  src/PJMenuViewController.m \
+                  src/PJCartItem.m \
+                  src/PJCartManager.m \
+                  src/PJGlossButton.m \
                   src/PJMenuCell.m \
-                  src/PJGlossButton.m
+                  src/PJSberCell.m \
+                  src/PJMenuViewController.m \
+                  src/PJAuthViewController.m \
+                  src/PJItemDetailViewController.m \
+                  src/PJCartViewController.m
 
 PapaJohns_FRAMEWORKS = UIKit Foundation CoreGraphics QuartzCore
 PapaJohns_CFLAGS     = -fobjc-arc

@@ -1,12 +1,17 @@
-﻿#import "PJNetworkManager.h"
+// PJNetworkManager.m
+// Papa Johns iOS 6 client
+// (c) uofist | tg: @uofist
 
-static NSString * const kBaseURL = @"https://api.papajohns.ru/v2";
+#import "PJNetworkManager.h"
 
-// ─── internal connection delegate ───────────────────────────────────────────
+static NSString * const kBaseURL        = @"https://api.papajohns.ru/v2";
+static NSString * const kPJAuthTokenKey = @"PJAuthToken";
+
+// ── Internal connection delegate ──────────────────────────────────────────
 @interface PJConnection : NSObject <NSURLConnectionDataDelegate>
-@property (nonatomic, strong) NSMutableData   *data;
-@property (nonatomic, copy)   PJSuccessBlock   success;
-@property (nonatomic, copy)   PJFailureBlock   failure;
+@property (nonatomic, strong) NSMutableData *data;
+@property (nonatomic, copy)   PJSuccessBlock success;
+@property (nonatomic, copy)   PJFailureBlock failure;
 @end
 
 @implementation PJConnection
@@ -23,9 +28,7 @@ static NSString * const kBaseURL = @"https://api.papajohns.ru/v2";
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)c {
     NSError *err = nil;
-    id json = [NSJSONSerialization JSONObjectWithData:_data
-                                             options:0
-                                               error:&err];
+    id json = [NSJSONSerialization JSONObjectWithData:_data options:0 error:&err];
     dispatch_async(dispatch_get_main_queue(), ^{
         if (err) { if (_failure) _failure(err); }
         else      { if (_success) _success(json); }
@@ -37,12 +40,11 @@ static NSString * const kBaseURL = @"https://api.papajohns.ru/v2";
         if (_failure) _failure(error);
     });
 }
-
 @end
 
-// ─── manager ────────────────────────────────────────────────────────────────
+// ── Manager ───────────────────────────────────────────────────────────────
 @interface PJNetworkManager ()
-@property (nonatomic, strong) NSMutableArray *activeConnections; // retain delegates
+@property (nonatomic, strong) NSMutableArray *activeConnections;
 @end
 
 @implementation PJNetworkManager
@@ -56,17 +58,24 @@ static NSString * const kBaseURL = @"https://api.papajohns.ru/v2";
 
 - (instancetype)init {
     self = [super init];
-    if (self) _activeConnections = [NSMutableArray array];
+    if (self) {
+        _activeConnections = [NSMutableArray array];
+        _authToken = [[NSUserDefaults standardUserDefaults] stringForKey:kPJAuthTokenKey];
+    }
     return self;
 }
 
-// ─── GET ────────────────────────────────────────────────────────────────────
-- (void)GET:(NSString *)path
- parameters:(NSDictionary *)params
-    success:(PJSuccessBlock)success
-    failure:(PJFailureBlock)failure
+- (void)setAuthToken:(NSString *)token {
+    _authToken = [token copy];
+    [[NSUserDefaults standardUserDefaults] setObject:token forKey:kPJAuthTokenKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+// ── GET ───────────────────────────────────────────────────────────────────
+- (void)GET:(NSString *)path parameters:(NSDictionary *)params
+    success:(PJSuccessBlock)success failure:(PJFailureBlock)failure
 {
-    NSString *fullURL = [kBaseURL stringByAppendingString:path];
+    NSString *url = [kBaseURL stringByAppendingString:path];
     if (params.count) {
         NSMutableArray *parts = [NSMutableArray array];
         [params enumerateKeysAndObjectsUsingBlock:^(id k, id v, BOOL *s) {
@@ -74,61 +83,86 @@ static NSString * const kBaseURL = @"https://api.papajohns.ru/v2";
                 [k stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
                 [[v description] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
         }];
-        fullURL = [fullURL stringByAppendingFormat:@"?%@",
-                   [parts componentsJoinedByString:@"&"]];
+        url = [url stringByAppendingFormat:@"?%@", [parts componentsJoinedByString:@"&"]];
     }
-
     NSMutableURLRequest *req = [NSMutableURLRequest
-        requestWithURL:[NSURL URLWithString:fullURL]
+        requestWithURL:[NSURL URLWithString:url]
            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-       timeoutInterval:30.0];
+       timeoutInterval:30.f];
     [req setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-
+    if (_authToken)
+        [req setValue:[NSString stringWithFormat:@"Bearer %@", _authToken]
+   forHTTPHeaderField:@"Authorization"];
     [self _sendRequest:req success:success failure:failure];
 }
 
-// ─── POST ───────────────────────────────────────────────────────────────────
-- (void)POST:(NSString *)path
-  parameters:(NSDictionary *)params
-     success:(PJSuccessBlock)success
-     failure:(PJFailureBlock)failure
+// ── POST ──────────────────────────────────────────────────────────────────
+- (void)POST:(NSString *)path parameters:(NSDictionary *)params
+     success:(PJSuccessBlock)success failure:(PJFailureBlock)failure
 {
-    NSString *fullURL = [kBaseURL stringByAppendingString:path];
     NSMutableURLRequest *req = [NSMutableURLRequest
-        requestWithURL:[NSURL URLWithString:fullURL]
+        requestWithURL:[NSURL URLWithString:[kBaseURL stringByAppendingString:path]]
            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-       timeoutInterval:30.0];
+       timeoutInterval:30.f];
     req.HTTPMethod = @"POST";
     [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [req setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-
-    if (params) {
-        req.HTTPBody = [NSJSONSerialization dataWithJSONObject:params
-                                                       options:0
-                                                         error:nil];
-    }
+    if (_authToken)
+        [req setValue:[NSString stringWithFormat:@"Bearer %@", _authToken]
+   forHTTPHeaderField:@"Authorization"];
+    if (params)
+        req.HTTPBody = [NSJSONSerialization dataWithJSONObject:params options:0 error:nil];
     [self _sendRequest:req success:success failure:failure];
 }
 
-// ─── internal ───────────────────────────────────────────────────────────────
 - (void)_sendRequest:(NSURLRequest *)req
-             success:(PJSuccessBlock)success
-             failure:(PJFailureBlock)failure
+             success:(PJSuccessBlock)success failure:(PJFailureBlock)failure
 {
     PJConnection *conn = [[PJConnection alloc] init];
     conn.success = success;
     conn.failure = failure;
-
     [_activeConnections addObject:conn];
-
-    NSURLConnection *urlConn = [[NSURLConnection alloc]
+    NSURLConnection *c = [[NSURLConnection alloc]
         initWithRequest:req delegate:conn startImmediately:NO];
-    [urlConn scheduleInRunLoop:[NSRunLoop mainRunLoop]
-                       forMode:NSRunLoopCommonModes];
-    [urlConn start];
+    [c scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+    [c start];
+}
 
-    // cleanup after finish — swizzle via notification or just let ARC/weak handle;
-    // для простоты держим в массиве — connection живёт пока не отпишется
+// ── Auth ──────────────────────────────────────────────────────────────────
+- (void)sendOTPToPhone:(NSString *)phone
+               success:(PJSuccessBlock)success failure:(PJFailureBlock)failure
+{
+    [self POST:@"/auth/phone/request"
+    parameters:@{@"phone": phone}
+       success:success failure:failure];
+}
+
+- (void)verifyOTP:(NSString *)code phone:(NSString *)phone
+          success:(PJSuccessBlock)success failure:(PJFailureBlock)failure
+{
+    [self POST:@"/auth/phone/confirm"
+    parameters:@{@"phone": phone, @"code": code}
+       success:^(id resp) {
+           NSString *token = resp[@"token"];
+           if (token) self.authToken = token;
+           if (success) success(resp);
+       } failure:failure];
+}
+
+// ── Catalog ───────────────────────────────────────────────────────────────
+- (void)fetchMenuWithSuccess:(PJSuccessBlock)success failure:(PJFailureBlock)failure {
+    [self GET:@"/menu" parameters:nil success:success failure:failure];
+}
+
+- (void)fetchProduct:(NSString *)pid success:(PJSuccessBlock)success failure:(PJFailureBlock)failure {
+    NSString *path = [@"/products/" stringByAppendingString:pid];
+    [self GET:path parameters:nil success:success failure:failure];
+}
+
+// ── Orders ────────────────────────────────────────────────────────────────
+- (void)placeOrder:(NSDictionary *)data
+           success:(PJSuccessBlock)success failure:(PJFailureBlock)failure {
+    [self POST:@"/orders" parameters:data success:success failure:failure];
 }
 
 @end
