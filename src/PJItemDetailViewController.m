@@ -1,5 +1,5 @@
-﻿// PJItemDetailViewController.m
-// Папаша Беппе iOS 6 client
+// PJItemDetailViewController.m
+// Papa Johns iOS 6 client
 // (c) uofist | tg: @uofist
 
 #import "PJItemDetailViewController.h"
@@ -28,20 +28,20 @@
 
     CGFloat W = self.view.bounds.size.width;
 
-    // в”Ђв”Ђ ScrollView в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+    // ── ScrollView ────────────────────────────────────────────────────────
     UIScrollView *sv = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     sv.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:sv];
 
     CGFloat y = 0.f;
 
-    // в”Ђв”Ђ Р¤РѕС‚Рѕ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+    // ── Фото ─────────────────────────────────────────────────────────────
     _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.f, y, W, 220.f)];
     _imageView.contentMode    = UIViewContentModeScaleAspectFill;
     _imageView.clipsToBounds  = YES;
     _imageView.backgroundColor = [UIColor colorWithRed:0.90f green:0.85f blue:0.80f alpha:1.f];
     [sv addSubview:_imageView];
-    // РіСЂР°РґРёРµРЅС‚-РїРµСЂРµС…РѕРґ РІРЅРёР·Сѓ С„РѕС‚Рѕ
+    // градиент-переход внизу фото
     CAGradientLayer *fadeGrad = [CAGradientLayer layer];
     fadeGrad.frame  = CGRectMake(0.f, 140.f, W, 80.f);
     fadeGrad.colors = @[
@@ -51,7 +51,7 @@
     [_imageView.layer addSublayer:fadeGrad];
     y += 220.f;
 
-    // в”Ђв”Ђ РќР°Р·РІР°РЅРёРµ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+    // ── Название ─────────────────────────────────────────────────────────
     UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(16.f, y + 14.f, W - 32.f, 56.f)];
     name.text          = _item.name;
     name.font          = [UIFont boldSystemFontOfSize:22.f];
@@ -60,25 +60,25 @@
     [sv addSubview:name];
     y += 76.f;
 
-    // в”Ђв”Ђ Р¦РµРЅР° в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+    // ── Цена ─────────────────────────────────────────────────────────────
     UILabel *price = [[UILabel alloc] initWithFrame:CGRectMake(16.f, y, W - 32.f, 36.f)];
-    price.text      = [NSString stringWithFormat:@"%.0f СЂСѓР±.", _item.price];
+    price.text      = [NSString stringWithFormat:@"%.0f руб.", _item.price];
     price.font      = [UIFont boldSystemFontOfSize:28.f];
     price.textColor = [UIColor colorWithRed:0.78f green:0.05f blue:0.08f alpha:1.f];
     [sv addSubview:price];
     y += 48.f;
 
-    // в”Ђв”Ђ Р Р°Р·РґРµР»РёС‚РµР»СЊ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+    // ── Разделитель ───────────────────────────────────────────────────────
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(16.f, y, W - 32.f, 1.f)];
     line.backgroundColor = [UIColor colorWithWhite:0.80f alpha:1.f];
     [sv addSubview:line];
     y += 14.f;
 
-    // в”Ђв”Ђ РћРїРёСЃР°РЅРёРµ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+    // ── Описание ─────────────────────────────────────────────────────────
     UILabel *desc = [[UILabel alloc] init];
     desc.text          = _item.itemDescription.length
                             ? _item.itemDescription
-                            : @"РћРїРёСЃР°РЅРёРµ РїРѕСЏРІРёС‚СЃСЏ РїРѕР·Р¶Рµ.";
+                            : @"Описание появится позже.";
     desc.font          = [UIFont systemFontOfSize:14.f];
     desc.textColor     = [UIColor colorWithWhite:0.45f alpha:1.f];
     desc.numberOfLines = 0;
@@ -88,11 +88,11 @@
     [sv addSubview:desc];
     y += desc.frame.size.height + 28.f;
 
-    // в”Ђв”Ђ РљРЅРѕРїРєР° "Р’ РєРѕСЂР·РёРЅСѓ" в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+    // ── Кнопка "В корзину" ────────────────────────────────────────────────
     CGFloat bW = MIN(W - 40.f, 280.f);
     PJGlossButton *btn = [[PJGlossButton alloc]
         initWithFrame:CGRectMake((W - bW)/2.f, y, bW, 52.f)];
-    [btn setTitle:@"Р’ РєРѕСЂР·РёРЅСѓ" forState:UIControlStateNormal];
+    [btn setTitle:@"В корзину" forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont boldSystemFontOfSize:16.f];
     [btn addTarget:self action:@selector(_addToCart) forControlEvents:UIControlEventTouchUpInside];
     [sv addSubview:btn];
@@ -100,7 +100,7 @@
 
     sv.contentSize = CGSizeMake(W, y);
 
-    // в”Ђв”Ђ РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ Р·Р°РіСЂСѓР·РєР° С„РѕС‚Рѕ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+    // ── Асинхронная загрузка фото ─────────────────────────────────────────
     if (_item.imageURL.length) {
         NSString *url = _item.imageURL;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -112,7 +112,7 @@
         });
     }
 
-    // в”Ђв”Ђ РљРЅРѕРїРєР° РєРѕСЂР·РёРЅС‹ РІ nav bar в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+    // ── Кнопка корзины в nav bar ──────────────────────────────────────────
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(_updateCartBtn)
                                                  name:PJCartDidUpdateNotification
@@ -126,7 +126,7 @@
 
 - (void)_updateCartBtn {
     NSInteger n = [PJCartManager sharedManager].totalCount;
-    NSString *t = n > 0 ? [NSString stringWithFormat:@"рџ›’ %ld", (long)n] : @"рџ›’";
+    NSString *t = n > 0 ? [NSString stringWithFormat:@"🛒 %ld", (long)n] : @"🛒";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
         initWithTitle:t style:UIBarButtonItemStyleBordered
                target:self action:@selector(_openCart)];
@@ -134,7 +134,7 @@
 
 - (void)_addToCart {
     [[PJCartManager sharedManager] addItem:_item];
-    // РІРёР·СѓР°Р»СЊРЅС‹Р№ С„РёРґР±СЌРє: Р»С‘РіРєР°СЏ РІРёР±СЂР°С†РёСЏ РєРЅРѕРїРєРё
+    // визуальный фидбэк: лёгкая вибрация кнопки
     [UIView animateWithDuration:0.08f animations:^{
         self.view.transform = CGAffineTransformMakeScale(0.97f, 0.97f);
     } completion:^(BOOL d) {
@@ -151,4 +151,3 @@
 }
 
 @end
-

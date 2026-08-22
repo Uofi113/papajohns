@@ -1,5 +1,5 @@
-﻿// PJMenuItem.m
-// Папаша Беппе iOS 6 client
+// PJMenuItem.m
+// Papa Johns iOS 6 client
 // (c) uofist | tg: @uofist
 
 #import "PJMenuItem.h"
@@ -17,4 +17,3 @@
 }
 
 @end
-

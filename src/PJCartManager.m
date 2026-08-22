@@ -1,5 +1,5 @@
-﻿// PJCartManager.m
-// Папаша Беппе iOS 6 client
+// PJCartManager.m
+// Papa Johns iOS 6 client
 // (c) uofist | tg: @uofist
 
 #import "PJCartManager.h"
@@ -81,4 +81,3 @@ NSString * const PJCartDidUpdateNotification = @"PJCartDidUpdateNotification";
 }
 
 @end
-

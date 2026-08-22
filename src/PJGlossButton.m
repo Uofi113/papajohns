@@ -1,5 +1,5 @@
-﻿// PJGlossButton.m
-// Папаша Беппе iOS 6 client
+// PJGlossButton.m
+// Papa Johns iOS 6 client
 // (c) uofist | tg: @uofist
 
 #import "PJGlossButton.h"
@@ -27,7 +27,7 @@ static UIColor *PJBtnBotColor(void) {
     self.layer.borderColor  = [UIColor colorWithRed:0.35f green:0.f blue:0.f alpha:1.f].CGColor;
     self.layer.borderWidth  = 1.f;
 
-    // в”Ђв”Ђ РѕСЃРЅРѕРІРЅРѕР№ РіСЂР°РґРёРµРЅС‚ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+    // ── основной градиент ──────────────────────────────────────────────────
     _gradientLayer = [CAGradientLayer layer];
     _gradientLayer.colors = @[
         (id)PJBtnTopColor().CGColor,
@@ -36,7 +36,7 @@ static UIColor *PJBtnBotColor(void) {
     _gradientLayer.locations = @[@0.f, @1.f];
     [self.layer insertSublayer:_gradientLayer atIndex:0];
 
-    // в”Ђв”Ђ Р±Р»РёРє: РІРµСЂС…РЅСЏСЏ РїРѕР»РѕРІРёРЅР° в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+    // ── блик: верхняя половина ─────────────────────────────────────────────
     _glossLayer = [CAGradientLayer layer];
     _glossLayer.colors = @[
         (id)[UIColor colorWithWhite:1.f alpha:0.35f].CGColor,
@@ -45,12 +45,12 @@ static UIColor *PJBtnBotColor(void) {
     _glossLayer.locations = @[@0.f, @1.f];
     [self.layer insertSublayer:_glossLayer above:_gradientLayer];
 
-    // в”Ђв”Ђ РІРґР°РІР»РµРЅРЅС‹Р№ С‚РµРєСЃС‚ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+    // ── вдавленный текст ───────────────────────────────────────────────────
     self.titleLabel.font         = [UIFont boldSystemFontOfSize:13.f];
     self.titleLabel.shadowColor  = [UIColor colorWithWhite:1.f alpha:0.5f];
     self.titleLabel.shadowOffset = CGSizeMake(0.f, 1.f);
     [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self setTitle:@"Р’ РєРѕСЂР·РёРЅСѓ" forState:UIControlStateNormal];
+    [self setTitle:@"В корзину" forState:UIControlStateNormal];
 
     [self addTarget:self action:@selector(_touchDown)
    forControlEvents:UIControlEventTouchDown | UIControlEventTouchDragEnter];
@@ -74,4 +74,3 @@ static UIColor *PJBtnBotColor(void) {
 - (void)_touchUp   { _gradientLayer.opacity = 1.0f; }
 
 @end
-

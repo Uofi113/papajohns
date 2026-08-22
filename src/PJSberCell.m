@@ -1,5 +1,5 @@
-﻿// PJSberCell.m
-// Папаша Беппе iOS 6 client
+// PJSberCell.m
+// Papa Johns iOS 6 client
 // (c) uofist | tg: @uofist
 
 #import "PJSberCell.h"
@@ -18,11 +18,11 @@
     if (!self) return nil;
 
     self.selectionStyle          = UITableViewCellSelectionStyleNone;
-    self.userInteractionEnabled  = NO;   // РЅРµР»СЊР·СЏ С‚Р°РїРЅСѓС‚СЊ
+    self.userInteractionEnabled  = NO;   // нельзя тапнуть
     self.backgroundColor         = [UIColor clearColor];
     self.contentView.backgroundColor = [UIColor clearColor];
 
-    // в”Ђв”Ђ Р—РµР»С‘РЅР°СЏ РєР°СЂС‚РѕС‡РєР° РЎР±РµСЂР° в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+    // ── Зелёная карточка Сбера ─────────────────────────────────────────
     _card = [[UIView alloc] init];
     _card.layer.cornerRadius  = 10.f;
     _card.clipsToBounds        = NO;
@@ -32,7 +32,7 @@
     _card.layer.shadowOffset   = CGSizeMake(0.f, 2.f);
     [self.contentView addSubview:_card];
 
-    // Sber green: #21A038 в†’ #108228
+    // Sber green: #21A038 → #108228
     _grad = [CAGradientLayer layer];
     _grad.colors = @[
         (id)[UIColor colorWithRed:0.13f green:0.63f blue:0.22f alpha:1.f].CGColor,
@@ -41,17 +41,17 @@
     _grad.cornerRadius = 10.f;
     [_card.layer insertSublayer:_grad atIndex:0];
 
-    // РљР°СЂС‚РёРЅРєР° С‚РµР»РµС„РѕРЅР°
+    // Картинка телефона
     UIImageView *phoneIcon = [[UIImageView alloc] init];
     phoneIcon.contentMode = UIViewContentModeScaleAspectFit;
     phoneIcon.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fly_phone" ofType:@"png"]];
     phoneIcon.tag = 10;
     [_card addSubview:phoneIcon];
 
-    // Р—Р°РіРѕР»РѕРІРѕРє
+    // Заголовок
     UILabel *title = [[UILabel alloc] init];
     title.backgroundColor = [UIColor clearColor];
-    title.text         = @"РўРµР»РµС„РѕРЅ Р·Р° 1000 Р±РѕРЅСѓСЃРѕРІ";
+    title.text         = @"Телефон за 1000 бонусов";
     title.font         = [UIFont boldSystemFontOfSize:15.f];
     title.textColor    = [UIColor whiteColor];
     title.shadowColor  = [UIColor colorWithWhite:0.f alpha:0.35f];
@@ -59,19 +59,19 @@
     title.tag          = 11;
     [_card addSubview:title];
 
-    // РџРѕРґР·Р°РіРѕР»РѕРІРѕРє
+    // Подзаголовок
     UILabel *sub = [[UILabel alloc] init];
     sub.backgroundColor = [UIColor clearColor];
-    sub.text      = @"РЎР±РµСЂРЎРїР°СЃРёР±Рѕ";
+    sub.text      = @"СберСпасибо";
     sub.font      = [UIFont systemFontOfSize:12.f];
     sub.textColor = [UIColor colorWithWhite:1.f alpha:0.72f];
     sub.tag       = 12;
     [_card addSubview:sub];
 
-    // Р¦РµРЅР° (Р¶С‘Р»С‚С‹Рј, РєР°Рє Р±РѕРЅСѓСЃС‹)
+    // Цена (жёлтым, как бонусы)
     UILabel *price = [[UILabel alloc] init];
     price.backgroundColor = [UIColor clearColor];
-    price.text         = @"1 000 Р±   РЎР±РµСЂРЎРїР°СЃРёР±Рѕ";
+    price.text         = @"1 000 б   СберСпасибо";
     price.font         = [UIFont boldSystemFontOfSize:17.f];
     price.textColor    = [UIColor colorWithRed:1.f green:0.92f blue:0.f alpha:1.f];
     price.shadowColor  = [UIColor colorWithWhite:0.f alpha:0.35f];
@@ -98,7 +98,7 @@
 
     for (UIView *v in _card.subviews) {
         switch (v.tag) {
-            case 10: v.frame = CGRectMake(10.f, (ch - 80.f)/2.f, 60.f, 80.f); break; // С‚РµР»РµС„РѕРЅ
+            case 10: v.frame = CGRectMake(10.f, (ch - 80.f)/2.f, 60.f, 80.f); break; // телефон
             case 11: v.frame = CGRectMake(cx, 12.f, cw, 22.f); break;
             case 12: v.frame = CGRectMake(cx, 34.f, cw, 18.f); break;
             case 13: v.frame = CGRectMake(cx, 54.f, cw, 22.f); break;
@@ -109,4 +109,3 @@
 + (CGFloat)cellHeight { return 100.f; }
 
 @end
-

@@ -1,5 +1,5 @@
-﻿// PJCartItem.m
-// Папаша Беппе iOS 6 client
+// PJCartItem.m
+// Papa Johns iOS 6 client
 // (c) uofist | tg: @uofist
 
 #import "PJCartItem.h"
@@ -15,4 +15,3 @@
 - (CGFloat)totalPrice { return _menuItem.price * _quantity; }
 
 @end
-

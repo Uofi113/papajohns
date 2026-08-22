@@ -1,5 +1,5 @@
-﻿// PJMenuViewController.m
-// РџР°РїР°С€Р° Р‘РµРїРїРµ iOS 6 client
+// PJMenuViewController.m
+// Papa Johns iOS 6 client
 // (c) uofist | tg: @uofist
 
 #import "PJMenuViewController.h"
@@ -10,7 +10,7 @@
 #import "PJCartManager.h"
 #import "PJItemDetailViewController.h"
 #import "PJCartViewController.h"
-
+#import "PJAuthViewController.h"
 
 static NSString * const kMenuCellID = @"PJMenuCell";
 static NSString * const kSberCellID = @"PJSberCell";
@@ -25,20 +25,28 @@ static NSString * const kSberCellID = @"PJSberCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"Р СљР ВµР Р…РЎР‹";
+    self.title = @"Меню";
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.backgroundColor =
         [UIColor colorWithPatternImage:[self _woodTextureImage]];
 
-    // Р С™Р Р…Р С•Р С—Р С”Р В° Р С”Р С•РЎР‚Р В·Р С‘Р Р…РЎвЂ№
+    // Кнопка корзины
     _cartBtn = [[UIBarButtonItem alloc]
-        initWithTitle:@"РљРѕСЂР·РёРЅР°"
+        initWithTitle:@"Корзина"
                 style:UIBarButtonItemStyleBordered
                target:self
                action:@selector(_openCart)];
     self.navigationItem.rightBarButtonItem = _cartBtn;
 
-    // РЎРїРёРЅРЅРµСЂ
+    // Кнопка логаут
+    UIBarButtonItem *logoutBtn = [[UIBarButtonItem alloc]
+        initWithTitle:@"Выход"
+                style:UIBarButtonItemStyleBordered
+               target:self
+               action:@selector(_logout)];
+    self.navigationItem.leftBarButtonItem = logoutBtn;
+
+    // Спиннер
     _spinner = [[UIActivityIndicatorView alloc]
                 initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     _spinner.center           = self.view.center;
@@ -59,8 +67,8 @@ static NSString * const kSberCellID = @"PJSberCell";
 - (void)_cartUpdated {
     NSInteger n = [PJCartManager sharedManager].totalCount;
     _cartBtn.title = n > 0
-        ? [NSString stringWithFormat:@"РљРѕСЂР·РёРЅР° (%ld)", (long)n]
-        : @"РљРѕСЂР·РёРЅР°";
+        ? [NSString stringWithFormat:@"Корзина (%ld)", (long)n]
+        : @"Корзина";
 }
 
 - (void)_loadMenu {
@@ -84,14 +92,14 @@ static NSString * const kSberCellID = @"PJSberCell";
         }
         failure:^(NSError *err) {
             [_spinner stopAnimating];
-            UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"Р С›РЎв‚¬Р С‘Р В±Р С”Р В° API"
+            UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"Ошибка API"
                 message:err.localizedDescription delegate:nil
                 cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [a show];
         }];
 }
 
-// РІвЂќР‚РІвЂќР‚ DataSource РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚
+// ── DataSource ────────────────────────────────────────────────────────────
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tv { return 2; }
 
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)s {
@@ -122,17 +130,17 @@ static NSString * const kSberCellID = @"PJSberCell";
     cell.addToCartBlock = ^(PJMenuItem *tapped) {
         [[PJCartManager sharedManager] addItem:tapped];
         NSString *old = weak.title;
-        weak.title = @"РІСљвЂњ Р вЂќР С•Р В±Р В°Р Р†Р В»Р ВµР Р…Р С•";
+        weak.title = @"✓ Добавлено";
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)),
                        dispatch_get_main_queue(), ^{ weak.title = old; });
     };
     return cell;
 }
 
-// РІвЂќР‚РІвЂќР‚ Delegate РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚
+// ── Delegate ──────────────────────────────────────────────────────────────
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)ip {
     [tv deselectRowAtIndexPath:ip animated:YES];
-    if (ip.section == 1) return;  // SberSpasibo РІР‚вЂќ Р Р…Р ВµРЎвЂљР В°Р С—Р В°Р ВµР СРЎвЂ№Р в„–
+    if (ip.section == 1) return;  // SberSpasibo — нетапаемый
     PJMenuItem *item = _items[(NSUInteger)ip.row];
     PJItemDetailViewController *detail = [[PJItemDetailViewController alloc] initWithItem:item];
     [self.navigationController pushViewController:detail animated:YES];
@@ -144,9 +152,18 @@ static NSString * const kSberCellID = @"PJSberCell";
     [self.navigationController pushViewController:cart animated:YES];
 }
 
+- (void)_logout {
+    [PJNetworkManager sharedManager].authToken = nil;
+    UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"Успешно" message:@"Вы вышли из аккаунта" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [a show];
+    
+    // Возвращаемся на экран авторизации
+    PJAuthViewController *auth = [[PJAuthViewController alloc] init];
+    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:auth];
+    [self.view.window setRootViewController:nc];
+}
 
-
-// РІвЂќР‚РІвЂќР‚ Р СћР ВµР С”РЎРѓРЎвЂљРЎС“РЎР‚Р В° Р Т‘Р ВµРЎР‚Р ВµР Р†Р В° РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚
+// ── Текстура дерева ───────────────────────────────────────────────────────
 - (UIImage *)_woodTextureImage {
     CGSize sz = CGSizeMake(128.f, 128.f);
     UIGraphicsBeginImageContextWithOptions(sz, YES, 0.f);
@@ -177,6 +194,3 @@ static NSString * const kSberCellID = @"PJSberCell";
 }
 
 @end
-
-
-
