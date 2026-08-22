@@ -82,7 +82,7 @@
     _phoneField = [[UITextField alloc] initWithFrame:CGRectMake(pad, 18.f, cW - pad*2, 46.f)];
     _phoneField.backgroundColor = [UIColor whiteColor];
     _phoneField.layer.cornerRadius = 8.f;
-    _phoneField.placeholder   = @"+7 " " __ "_;
+    _phoneField.placeholder   = @"+7 (___) ___-__-__";
     _phoneField.keyboardType  = UIKeyboardTypePhonePad;
     _phoneField.textAlignment = NSTextAlignmentCenter;
     _phoneField.font          = [UIFont systemFontOfSize:18.f];
