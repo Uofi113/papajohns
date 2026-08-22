@@ -1,5 +1,5 @@
 ﻿// PJMenuViewController.m
-// Папаша Беппе iOS 6 client
+// РџР°РїР°С€Р° Р‘РµРїРїРµ iOS 6 client
 // (c) uofist | tg: @uofist
 
 #import "PJMenuViewController.h"
@@ -25,26 +25,18 @@ static NSString * const kSberCellID = @"PJSberCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"РњРµРЅСЋ";
+    self.title = @"Р СљР ВµР Р…РЎР‹";
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.backgroundColor =
         [UIColor colorWithPatternImage:[self _woodTextureImage]];
 
-    // РљРЅРѕРїРєР° РєРѕСЂР·РёРЅС‹
+    // Р С™Р Р…Р С•Р С—Р С”Р В° Р С”Р С•РЎР‚Р В·Р С‘Р Р…РЎвЂ№
     _cartBtn = [[UIBarButtonItem alloc]
         initWithTitle:@"РљРѕСЂР·РёРЅР°"
                 style:UIBarButtonItemStyleBordered
                target:self
                action:@selector(_openCart)];
     self.navigationItem.rightBarButtonItem = _cartBtn;
-
-    // РљРЅРѕРїРєР° Р»РѕРіР°СѓС‚
-    UIBarButtonItem *logoutBtn = [[UIBarButtonItem alloc]
-        initWithTitle:@"Р’С‹С…РѕРґ"
-                style:UIBarButtonItemStyleBordered
-               target:self
-               action:@selector(_logout)];
-    self.navigationItem.leftBarButtonItem = logoutBtn;
 
     // РЎРїРёРЅРЅРµСЂ
     _spinner = [[UIActivityIndicatorView alloc]
@@ -92,14 +84,14 @@ static NSString * const kSberCellID = @"PJSberCell";
         }
         failure:^(NSError *err) {
             [_spinner stopAnimating];
-            UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"РћС€РёР±РєР° API"
+            UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"Р С›РЎв‚¬Р С‘Р В±Р С”Р В° API"
                 message:err.localizedDescription delegate:nil
                 cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [a show];
         }];
 }
 
-// в”Ђв”Ђ DataSource в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+// РІвЂќР‚РІвЂќР‚ DataSource РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tv { return 2; }
 
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)s {
@@ -130,17 +122,17 @@ static NSString * const kSberCellID = @"PJSberCell";
     cell.addToCartBlock = ^(PJMenuItem *tapped) {
         [[PJCartManager sharedManager] addItem:tapped];
         NSString *old = weak.title;
-        weak.title = @"вњ“ Р”РѕР±Р°РІР»РµРЅРѕ";
+        weak.title = @"РІСљвЂњ Р вЂќР С•Р В±Р В°Р Р†Р В»Р ВµР Р…Р С•";
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)),
                        dispatch_get_main_queue(), ^{ weak.title = old; });
     };
     return cell;
 }
 
-// в”Ђв”Ђ Delegate в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+// РІвЂќР‚РІвЂќР‚ Delegate РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)ip {
     [tv deselectRowAtIndexPath:ip animated:YES];
-    if (ip.section == 1) return;  // SberSpasibo вЂ” РЅРµС‚Р°РїР°РµРјС‹Р№
+    if (ip.section == 1) return;  // SberSpasibo РІР‚вЂќ Р Р…Р ВµРЎвЂљР В°Р С—Р В°Р ВµР СРЎвЂ№Р в„–
     PJMenuItem *item = _items[(NSUInteger)ip.row];
     PJItemDetailViewController *detail = [[PJItemDetailViewController alloc] initWithItem:item];
     [self.navigationController pushViewController:detail animated:YES];
@@ -152,18 +144,9 @@ static NSString * const kSberCellID = @"PJSberCell";
     [self.navigationController pushViewController:cart animated:YES];
 }
 
-- (void)_logout {
-    [PJNetworkManager sharedManager].authToken = nil;
-    UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"РЈСЃРїРµС€РЅРѕ" message:@"Р’С‹ РІС‹С€Р»Рё РёР· Р°РєРєР°СѓРЅС‚Р°" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [a show];
-    
-    // Р’РѕР·РІСЂР°С‰Р°РµРјСЃСЏ РЅР° СЌРєСЂР°РЅ Р°РІС‚РѕСЂРёР·Р°С†РёРё
-    PJAuthViewController *auth = [[PJAuthViewController alloc] init];
-    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:auth];
-    [self.view.window setRootViewController:nc];
-}
 
-// в”Ђв”Ђ РўРµРєСЃС‚СѓСЂР° РґРµСЂРµРІР° в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+
+// РІвЂќР‚РІвЂќР‚ Р СћР ВµР С”РЎРѓРЎвЂљРЎС“РЎР‚Р В° Р Т‘Р ВµРЎР‚Р ВµР Р†Р В° РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚
 - (UIImage *)_woodTextureImage {
     CGSize sz = CGSizeMake(128.f, 128.f);
     UIGraphicsBeginImageContextWithOptions(sz, YES, 0.f);
@@ -194,4 +177,5 @@ static NSString * const kSberCellID = @"PJSberCell";
 }
 
 @end
+
 
