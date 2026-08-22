@@ -80,8 +80,7 @@
 
     // Телефон
     _phoneField = [[UITextField alloc] initWithFrame:CGRectMake(pad, 18.f, cW - pad*2, 46.f)];
-    _phoneField.backgroundColor = [UIColor whiteColor];
-    _phoneField.layer.cornerRadius = 8.f;
+    _phoneField.borderStyle = UITextBorderStyleRoundedRect;
     _phoneField.placeholder   = @"+7 (___) ___-__-__";
     _phoneField.keyboardType  = UIKeyboardTypePhonePad;
     _phoneField.textAlignment = NSTextAlignmentCenter;
@@ -97,8 +96,7 @@
 
     // OTP поле (скрыто)
     _otpField = [[UITextField alloc] initWithFrame:CGRectMake(pad, 136.f, cW - pad*2, 46.f)];
-    _otpField.backgroundColor = [UIColor whiteColor];
-    _otpField.layer.cornerRadius = 8.f;
+    _otpField.borderStyle = UITextBorderStyleRoundedRect;
     _otpField.placeholder   = @"Код из SMS";
     _otpField.keyboardType  = UIKeyboardTypeNumberPad;
     _otpField.textAlignment = NSTextAlignmentCenter;

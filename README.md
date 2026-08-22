@@ -1,85 +1,28 @@
-﻿<p align="center">
-  <img src="https://img.shields.io/badge/platform-iOS%206.0-red?style=flat-square&logo=apple" />
-  <img src="https://img.shields.io/badge/built%20with-Theos-orange?style=flat-square" />
-  <img src="https://img.shields.io/badge/language-Objective--C-blue?style=flat-square" />
-</p>
+﻿# Papa Johns (iOS 6 Skeuomorphic Client)
+> Нативный, ламповый iOS 6 клиент для пиццерии «Папа Джонс» (с секретом)
 
-<h1 align="center">🍕 Papa Johns iOS 6</h1>
-<p align="center">Нативный клиент Papa John's для iPhone на iOS 6, собранный через Theos без Xcode и сторибордов.<br/>Чистый Objective-C. Максимальный скевоморфизм.</p>
+![iOS 6 Ready](https://img.shields.io/badge/iOS-6.0%2B-blue?style=flat-square)
+![Skeuomorphism](https://img.shields.io/badge/Design-Skeuomorphic-green?style=flat-square)
+![Made for Fun](https://img.shields.io/badge/Status-Mock-orange?style=flat-square)
 
----
+Этот проект — возвращение в золотую эру скевоморфизма, когда кнопки были объемными, фоны — кожаными и деревянными, а приложения работали молниеносно. 
+
+Приложение содержит базовую симуляцию функций настоящего приложения Папа Джонс и один спрятанный секрет.
 
 ## Фичи
+* 🍕 **Авторизация**: Красивый экран входа с красной кожей (просто введите любой номер и код).
+* 📜 **Каталог**: Деревянный фон, белые карточки с тенями.
+* 🛒 **Корзина**: Настоящее добавление/удаление пиццы. 
+* 🎁 **Пасхалка СберСпасибо**: За 1000 бонусов.
 
-| | |
-|---|---|
-| 📋 **Каталог** | `UITableViewController` с текстурой дерева через `colorWithPatternImage:` |
-| 🃏 **Карточки** | Белая подложка ячейки, `UIBezierPath` shadowPath — скролл без лагов |
-| ✨ **Глянец** | Кнопка «В корзину» на `CAGradientLayer` + полупрозрачный блик + вдавленный текст |
-| 🌐 **Сеть** | `NSURLConnection` с блоками, async GET/POST, `NSJSONSerialization` |
-| 📦 **Сборка** | Theos → `.deb`, устанавливается в `/Applications` |
+## Установка
 
----
+Проект настроен на сборку .deb пакета через GitHub Actions (Theos + Ubuntu).
+Собранный пакет можно скачать во вкладке **Actions** -> **Artifacts**.
 
-## Сборка
+1. Скачайте PapaJohns-deb из GitHub Actions.
+2. Перенесите PapaJohns.deb на устройство.
+3. Установите через **iFile / Filza** (или командой dpkg -i).
+4. **ВАЖНО**: Обязательно запустите uicache в терминале и сделайте **Respring**, чтобы появилась иконка!
 
-### GitHub Actions (автоматически)
-
-При каждом пуше в `main`/`master` Actions собирает проект на Ubuntu и кладёт `.deb` в **Artifacts**.
-
-### Вручную (Ubuntu / WSL)
-
-```bash
-export THEOS=/opt/theos
-git clone --recursive https://github.com/theos/theos.git $THEOS
-
-make package FINALPACKAGE=1
-```
-
-`.deb` появится в папке `packages/`.
-
----
-
-## Установка на устройство
-
-```bash
-scp packages/*.deb root@<ip>:/tmp/
-ssh root@<ip> "dpkg -i /tmp/*.deb && uicache"
-```
-
-Или скинуть `.deb` вручную через Filza.
-
----
-
-## Структура
-
-```
-.
-├── .github/workflows/build.yml   # CI: сборка и публикация .deb
-├── Makefile                       # Theos: цели, архитектуры, фреймворки
-├── control                        # dpkg: метаданные пакета
-└── src/
-    ├── main.m
-    ├── AppDelegate.h / .m
-    ├── PJNetworkManager.h / .m    # NSURLConnection, GET/POST, JSON
-    ├── PJMenuItem.h / .m          # Модель позиции меню
-    ├── PJGlossButton.h / .m       # Глянцевая кнопка (CAGradientLayer)
-    ├── PJMenuCell.h / .m          # UITableViewCell с карточкой и тенью
-    └── PJMenuViewController.h/.m  # Каталог, текстура дерева
-```
-
----
-
-## Требования
-
-- iOS 6.0+, armv7 / armv7s
-- Jailbreak (Cydia / Sileo)
-- Theos (сборка на Ubuntu/macOS)
-
----
-
-<p align="center">
-  Сделано с ❤️ и ностальгией &nbsp;·&nbsp;
-  <a href="https://t.me/uofist">@uofist</a> &nbsp;·&nbsp;
-  <a href="https://github.com/uofi113">uofi113</a>
-</p>
+*(c) uofist | tg: @uofist*
