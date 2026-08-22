@@ -10,6 +10,7 @@
 #import "PJCartManager.h"
 #import "PJItemDetailViewController.h"
 #import "PJCartViewController.h"
+#import "PJAuthViewController.h"
 
 static NSString * const kMenuCellID = @"PJMenuCell";
 static NSString * const kSberCellID = @"PJSberCell";
@@ -36,6 +37,14 @@ static NSString * const kSberCellID = @"PJSberCell";
                target:self
                action:@selector(_openCart)];
     self.navigationItem.rightBarButtonItem = _cartBtn;
+
+    // Кнопка логаут
+    UIBarButtonItem *logoutBtn = [[UIBarButtonItem alloc]
+        initWithTitle:@"Выход"
+                style:UIBarButtonItemStyleBordered
+               target:self
+               action:@selector(_logout)];
+    self.navigationItem.leftBarButtonItem = logoutBtn;
 
     // Спиннер
     _spinner = [[UIActivityIndicatorView alloc]
@@ -141,6 +150,17 @@ static NSString * const kSberCellID = @"PJSberCell";
     PJCartViewController *cart = [[PJCartViewController alloc]
         initWithStyle:UITableViewStylePlain];
     [self.navigationController pushViewController:cart animated:YES];
+}
+
+- (void)_logout {
+    [PJNetworkManager sharedManager].authToken = nil;
+    UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"Успешно" message:@"Вы вышли из аккаунта" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [a show];
+    
+    // Возвращаемся на экран авторизации
+    PJAuthViewController *auth = [[PJAuthViewController alloc] init];
+    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:auth];
+    [self.view.window setRootViewController:nc];
 }
 
 // ── Текстура дерева ───────────────────────────────────────────────────────

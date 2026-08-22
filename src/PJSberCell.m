@@ -41,14 +41,12 @@
     _grad.cornerRadius = 10.f;
     [_card.layer insertSublayer:_grad atIndex:0];
 
-    // Иконка замка
-    UILabel *lock = [[UILabel alloc] init];
-    lock.backgroundColor = [UIColor clearColor];
-    lock.text          = @"🔒";
-    lock.font          = [UIFont systemFontOfSize:34.f];
-    lock.textAlignment = NSTextAlignmentCenter;
-    lock.tag           = 10;
-    [_card addSubview:lock];
+    // Картинка телефона
+    UIImageView *phoneIcon = [[UIImageView alloc] init];
+    phoneIcon.contentMode = UIViewContentModeScaleAspectFit;
+    phoneIcon.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fly_phone" ofType:@"png"]];
+    phoneIcon.tag = 10;
+    [_card addSubview:phoneIcon];
 
     // Заголовок
     UILabel *title = [[UILabel alloc] init];
@@ -99,13 +97,11 @@
     CGFloat ch    = _card.bounds.size.height;
 
     for (UIView *v in _card.subviews) {
-        if (![v isKindOfClass:[UILabel class]]) continue;
-        UILabel *l = (UILabel *)v;
-        switch (l.tag) {
-            case 10: l.frame = CGRectMake(0.f, (ch - iconW)/2.f, iconW, iconW); break;
-            case 11: l.frame = CGRectMake(cx, 12.f, cw, 22.f); break;
-            case 12: l.frame = CGRectMake(cx, 34.f, cw, 18.f); break;
-            case 13: l.frame = CGRectMake(cx, 54.f, cw, 22.f); break;
+        switch (v.tag) {
+            case 10: v.frame = CGRectMake(10.f, (ch - 80.f)/2.f, 60.f, 80.f); break; // телефон
+            case 11: v.frame = CGRectMake(cx, 12.f, cw, 22.f); break;
+            case 12: v.frame = CGRectMake(cx, 34.f, cw, 18.f); break;
+            case 13: v.frame = CGRectMake(cx, 54.f, cw, 22.f); break;
         }
     }
 }
