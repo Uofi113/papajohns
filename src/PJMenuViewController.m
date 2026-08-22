@@ -32,7 +32,7 @@ static NSString * const kSberCellID = @"PJSberCell";
 
     // Кнопка корзины
     _cartBtn = [[UIBarButtonItem alloc]
-        initWithTitle:@"🛒"
+        initWithTitle:@"Корзина"
                 style:UIBarButtonItemStyleBordered
                target:self
                action:@selector(_openCart)];
@@ -67,8 +67,8 @@ static NSString * const kSberCellID = @"PJSberCell";
 - (void)_cartUpdated {
     NSInteger n = [PJCartManager sharedManager].totalCount;
     _cartBtn.title = n > 0
-        ? [NSString stringWithFormat:@"🛒 %ld", (long)n]
-        : @"🛒";
+        ? [NSString stringWithFormat:@"Корзина (%ld)", (long)n]
+        : @"Корзина";
 }
 
 - (void)_loadMenu {

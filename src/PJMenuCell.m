@@ -117,19 +117,24 @@ static const CGFloat kThumbSize  = 80.f;
     _currentItem     = item;
     _nameLabel.text  = item.name;
     _descLabel.text  = item.itemDescription;
-    _priceLabel.text = [NSString stringWithFormat:@"%.0f ₽", item.price];
+    _priceLabel.text = [NSString stringWithFormat:@"%.0f руб.", item.price];
 
     _thumb.image = nil;
-    if (item.imageURL.length) {
-        NSString *urlCopy = [item.imageURL copy];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSData  *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlCopy]];
-            UIImage *img  = data ? [UIImage imageWithData:data] : nil;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if ([_currentItem.imageURL isEqualToString:urlCopy])
-                    _thumb.image = img;
+    if (item.imageURL.length > 0) {
+        if ([item.imageURL hasPrefix:@"local://"]) {
+            NSString *filename = [item.imageURL substringFromIndex:8];
+            _thumb.image = [UIImage imageNamed:filename];
+        } else {
+            NSString *urlCopy = [item.imageURL copy];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                NSData  *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlCopy]];
+                UIImage *img  = data ? [UIImage imageWithData:data] : nil;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if ([_currentItem.imageURL isEqualToString:urlCopy])
+                        _thumb.image = img;
+                });
             });
-        });
+        }
     }
 }
 

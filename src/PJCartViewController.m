@@ -92,7 +92,7 @@
 
 - (void)configureWithCartItem:(PJCartItem *)ci {
     _nameLabel.text  = ci.menuItem.name;
-    _priceLabel.text = [NSString stringWithFormat:@"%.0f ₽", ci.totalPrice];
+    _priceLabel.text = [NSString stringWithFormat:@"%.0f руб.", ci.totalPrice];
     _qtyLabel.text   = [NSString stringWithFormat:@"%ld", (long)ci.quantity];
 }
 
@@ -120,7 +120,9 @@ static NSString * const kCartCellID = @"PJCartCell";
     self.tableView.backgroundColor  =
         [UIColor colorWithRed:0.96f green:0.94f blue:0.91f alpha:1.f];
     self.tableView.separatorColor   = [UIColor colorWithWhite:0.85f alpha:1.f];
-    self.tableView.separatorInset   = UIEdgeInsetsMake(0, 14, 0, 14);
+    if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+        self.tableView.separatorInset = UIEdgeInsetsMake(0, 14, 0, 14);
+    }
     [self.tableView registerClass:[PJCartCell class] forCellReuseIdentifier:kCartCellID];
 
     // ── Footer: итого + кнопка заказа ────────────────────────────────────
@@ -161,7 +163,7 @@ static NSString * const kCartCellID = @"PJCartCell";
 
 - (void)_reload {
     _cartItems = [PJCartManager sharedManager].cartItems;
-    _totalLabel.text = [NSString stringWithFormat:@"Итого: %.0f ₽",
+    _totalLabel.text = [NSString stringWithFormat:@"Итого: %.0f руб.",
                         [PJCartManager sharedManager].totalPrice];
     [self.tableView reloadData];
 }

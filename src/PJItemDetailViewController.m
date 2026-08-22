@@ -62,7 +62,7 @@
 
     // ── Цена ─────────────────────────────────────────────────────────────
     UILabel *price = [[UILabel alloc] initWithFrame:CGRectMake(16.f, y, W - 32.f, 36.f)];
-    price.text      = [NSString stringWithFormat:@"%.0f ₽", _item.price];
+    price.text      = [NSString stringWithFormat:@"%.0f руб.", _item.price];
     price.font      = [UIFont boldSystemFontOfSize:28.f];
     price.textColor = [UIColor colorWithRed:0.78f green:0.05f blue:0.08f alpha:1.f];
     [sv addSubview:price];
