@@ -174,7 +174,10 @@ static NSString * const kCartCellID = @"PJCartCell";
 - (UITableViewCell *)tableView:(UITableView *)tv
          cellForRowAtIndexPath:(NSIndexPath *)ip
 {
-    PJCartCell *cell = [tv dequeueReusableCellWithIdentifier:kCartCellID];
+    PJCartCell *cell = (PJCartCell *)[tv dequeueReusableCellWithIdentifier:kCartCellID];
+    if (!cell) {
+        cell = [[PJCartCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCartCellID];
+    }
     PJCartItem *ci   = _cartItems[(NSUInteger)ip.row];
     [cell configureWithCartItem:ci];
 

@@ -153,9 +153,9 @@ static NSString * const kPJAuthTokenKey = @"PJAuthToken";
     // MOCK: Return dummy pizza data
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         NSArray *items = @[
-            @{@"id": @"1", @"name": @"Пепперони", @"description": @"Пикантная пепперони, моцарелла, томатный соус", @"price": @(799), @"image_url": @"https://papajohns.ru/images/catalog/papajohns-pizza-pepperoni.png"},
-            @{@"id": @"2", @"name": @"Мясная", @"description": @"Бекон, ветчина, пепперони, моцарелла", @"price": @(899), @"image_url": @"https://papajohns.ru/images/catalog/papajohns-pizza-meat.png"},
-            @{@"id": @"3", @"name": @"Маргарита", @"description": @"Увеличенная порция моцареллы, томаты", @"price": @(599), @"image_url": @"https://papajohns.ru/images/catalog/papajohns-pizza-margarita.png"}
+            @{@"id": @"1", @"name": @"Пепперони", @"description": @"Пикантная пепперони, моцарелла, томатный соус", @"price": @(799), @"image_url": @"https://upload.wikimedia.org/wikipedia/commons/d/d1/Pepperoni_pizza.jpg"},
+            @{@"id": @"2", @"name": @"Мясная", @"description": @"Бекон, ветчина, пепперони, моцарелла", @"price": @(899), @"image_url": @"https://upload.wikimedia.org/wikipedia/commons/d/d3/Supreme_pizza.jpg"},
+            @{@"id": @"3", @"name": @"Маргарита", @"description": @"Увеличенная порция моцареллы, томаты", @"price": @(599), @"image_url": @"https://upload.wikimedia.org/wikipedia/commons/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg"}
         ];
         if (success) success(@{@"items": items});
     });

@@ -43,6 +43,7 @@
 
     // Иконка замка
     UILabel *lock = [[UILabel alloc] init];
+    lock.backgroundColor = [UIColor clearColor];
     lock.text          = @"🔒";
     lock.font          = [UIFont systemFontOfSize:34.f];
     lock.textAlignment = NSTextAlignmentCenter;
@@ -51,6 +52,7 @@
 
     // Заголовок
     UILabel *title = [[UILabel alloc] init];
+    title.backgroundColor = [UIColor clearColor];
     title.text         = @"Телефон за 1000 бонусов";
     title.font         = [UIFont boldSystemFontOfSize:15.f];
     title.textColor    = [UIColor whiteColor];
@@ -61,6 +63,7 @@
 
     // Подзаголовок
     UILabel *sub = [[UILabel alloc] init];
+    sub.backgroundColor = [UIColor clearColor];
     sub.text      = @"СберСпасибо";
     sub.font      = [UIFont systemFontOfSize:12.f];
     sub.textColor = [UIColor colorWithWhite:1.f alpha:0.72f];
@@ -69,6 +72,7 @@
 
     // Цена (жёлтым, как бонусы)
     UILabel *price = [[UILabel alloc] init];
+    price.backgroundColor = [UIColor clearColor];
     price.text         = @"1 000 б   СберСпасибо";
     price.font         = [UIFont boldSystemFontOfSize:17.f];
     price.textColor    = [UIColor colorWithRed:1.f green:0.92f blue:0.f alpha:1.f];
