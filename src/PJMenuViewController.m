@@ -51,6 +51,10 @@ static NSString * const kSberCellID = @"PJSberCell";
         selector:@selector(_cartUpdated) name:PJCartDidUpdateNotification object:nil];
 
     [self _loadMenu];
+
+    UIRefreshControl *rc = [[UIRefreshControl alloc] init];
+    [rc addTarget:self action:@selector(_loadMenu) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = rc;
 }
 
 - (void)dealloc {
@@ -68,6 +72,7 @@ static NSString * const kSberCellID = @"PJSberCell";
     [[PJNetworkManager sharedManager]
         fetchMenuWithSuccess:^(id resp) {
             [_spinner stopAnimating];
+            if (self.refreshControl.isRefreshing) [self.refreshControl endRefreshing];
             NSArray *raw = nil;
             if ([resp isKindOfClass:[NSArray class]]) {
                 raw = resp;
@@ -85,6 +90,7 @@ static NSString * const kSberCellID = @"PJSberCell";
         }
         failure:^(NSError *err) {
             [_spinner stopAnimating];
+            if (self.refreshControl.isRefreshing) [self.refreshControl endRefreshing];
             UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"Ошибка API"
                 message:err.localizedDescription delegate:nil
                 cancelButtonTitle:@"OK" otherButtonTitles:nil];

@@ -100,7 +100,8 @@ static NSString * const kPJAuthTokenKey = @"PJAuthToken";
 - (void)GET:(NSString *)path parameters:(NSDictionary *)params
     success:(PJSuccessBlock)success failure:(PJFailureBlock)failure
 {
-    NSString *url = [kBaseURL stringByAppendingString:path];
+        NSTimeInterval t = [[NSDate date] timeIntervalSince1970];
+    NSString *url = [NSString stringWithFormat:@"%@%@?t=%f", kBaseURL, path, t];
     if (params.count) {
         NSMutableArray *parts = [NSMutableArray array];
         [params enumerateKeysAndObjectsUsingBlock:^(id k, id v, BOOL *s) {
