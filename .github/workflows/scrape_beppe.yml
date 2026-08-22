@@ -1,0 +1,76 @@
+﻿name: Scrape Papasha Beppe
+
+on:
+  schedule:
+    - cron: '0 */12 * * *' # Every 12 hours
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4
+      - name: Scrape and update JSON
+        run: |
+          cat << 'EOF' > scraper.py
+          import requests, json, re
+          
+          headers = {'User-Agent': 'Mozilla/5.0'}
+          resp = requests.get('https://pabeppe.ru/', headers=headers)
+          html = resp.text
+          
+          # Extract the ShallowReactive JSON
+          matches = re.findall(r'<script.*?>\s*({.*?})\s*</script>', html, re.DOTALL)
+          target = ""
+          for m in matches:
+              if len(m) > 100000:
+                  target = m
+                  break
+          
+          if target:
+              # Simple regex extraction for pizzas
+              # Let's just grab names and prices from the HTML directly to be safer
+              from bs4 import BeautifulSoup
+              soup = BeautifulSoup(html, 'html.parser')
+              items = []
+              id_counter = 1
+              
+              # Find product cards (heuristics for Nuxt/Vue sites)
+              for card in soup.find_all('div', class_=re.compile('product|item|card', re.I)):
+                  name_tag = card.find(['h2', 'h3', 'h4', 'div'], class_=re.compile('name|title', re.I))
+                  price_tag = card.find(['span', 'div'], class_=re.compile('price', re.I))
+                  
+                  if name_tag and price_tag:
+                      name = name_tag.text.strip()
+                      price_text = re.sub(r'[^0-9]', '', price_tag.text)
+                      if price_text and len(price_text) <= 4:
+                          items.append({
+                              "id": str(id_counter),
+                              "name": name,
+                              "description": "Свежая пицца из Калининграда",
+                              "price": int(price_text),
+                              "image_url": "local://pep.jpg"
+                          })
+                          id_counter += 1
+              
+              if items:
+                  menu = {"items": items}
+                  with open('menu.json', 'w', encoding='utf-8') as f:
+                      json.dump(menu, f, ensure_ascii=False, indent=4)
+                  print(f"Updated menu.json with {len(items)} items.")
+              else:
+                  print("No items found.")
+          EOF
+          python scraper.py
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add menu.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: auto-update menu from Papasha Beppe" && git push)
