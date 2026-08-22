@@ -14,12 +14,46 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Официальный экшн от команды Theos — сам тянет Theos + нужный SDK,
-      # кэширует между ранами, ставит THEOS и THEOS_MAKE_PATH в env.
-      - name: Setup Theos
-        uses: theos/theos-action@v1
-        with:
-          cache-key: theos
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q fakeroot dpkg-dev curl git xz-utils
+
+      - name: Install Theos
+        run: |
+          export THEOS=/opt/theos
+          sudo git clone --recursive https://github.com/theos/theos.git "$THEOS"
+          sudo chmod -R 777 "$THEOS"
+          echo "THEOS=$THEOS"               >> "$GITHUB_ENV"
+          echo "THEOS_MAKE_PATH=$THEOS/makefiles" >> "$GITHUB_ENV"
+
+      - name: Download iOS SDK
+        run: |
+          mkdir -p "$THEOS/sdks"
+
+          # Берём URL последнего релизного ассета из theos/sdks через API.
+          # Предпочитаем iPhoneOS14.x — последний SDK с поддержкой armv7.
+          ASSET_URL=$(curl -fsSL \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/theos/sdks/releases/latest \
+            | python3 -c "
+          import sys, json
+          data = json.load(sys.stdin)
+          assets = data.get('assets', [])
+          # prefer 14.x for armv7 support
+          for a in assets:
+              if 'iPhoneOS14' in a['name'] and a['name'].endswith('.tar.xz'):
+                  print(a['browser_download_url']); raise SystemExit
+          # fallback: first .tar.xz asset
+          for a in assets:
+              if a['name'].endswith('.tar.xz'):
+                  print(a['browser_download_url']); raise SystemExit
+          ")
+
+          echo "SDK URL: $ASSET_URL"
+          curl -fsSL "$ASSET_URL" -o /tmp/sdk.tar.xz
+          tar -xJf /tmp/sdk.tar.xz -C "$THEOS/sdks"
+          echo "Installed SDKs: $(ls $THEOS/sdks)"
 
       - name: Build package
         run: make package FINALPACKAGE=1 2>&1
