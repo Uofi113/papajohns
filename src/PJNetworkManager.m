@@ -22,4 +22,8 @@
 - (void)sendOTPToPhone:(NSString *)phone success:(PJSuccessBlock)success failure:(PJFailureBlock)failure {}
 - (void)verifyOTP:(NSString *)code phone:(NSString *)phone success:(PJSuccessBlock)success failure:(PJFailureBlock)failure {}
 - (void)placeOrder:(NSDictionary *)data success:(PJSuccessBlock)success failure:(PJFailureBlock)failure {}
+
+- (void)GET:(NSString *)path parameters:(NSDictionary *)params success:(PJSuccessBlock)success failure:(PJFailureBlock)failure {}
+- (void)POST:(NSString *)path parameters:(NSDictionary *)params success:(PJSuccessBlock)success failure:(PJFailureBlock)failure {}
+
 @end
