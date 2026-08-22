@@ -1,5 +1,5 @@
-// PJMenuCell.m
-// Papa Johns iOS 6 client
+﻿// PJMenuCell.m
+// Папаша Беппе iOS 6 client
 // (c) uofist | tg: @uofist
 
 #import "PJMenuCell.h"
@@ -31,7 +31,7 @@ static const CGFloat kThumbSize  = 80.f;
     self.backgroundColor             = [UIColor clearColor];
     self.contentView.backgroundColor = [UIColor clearColor];
 
-    // ── белая карточка ────────────────────────────────────────────────────
+    // в”Ђв”Ђ Р±РµР»Р°СЏ РєР°СЂС‚РѕС‡РєР° в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     _card = [[UIView alloc] init];
     _card.backgroundColor    = [UIColor whiteColor];
     _card.layer.cornerRadius = kCardRadius;
@@ -42,7 +42,7 @@ static const CGFloat kThumbSize  = 80.f;
     _card.layer.shadowOffset  = CGSizeMake(0.f, 2.f);
     [self.contentView addSubview:_card];
 
-    // ── миниатюра ─────────────────────────────────────────────────────────
+    // в”Ђв”Ђ РјРёРЅРёР°С‚СЋСЂР° в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     _thumb = [[UIImageView alloc] init];
     _thumb.backgroundColor    = [UIColor colorWithWhite:0.92f alpha:1.f];
     _thumb.layer.cornerRadius = 6.f;
@@ -50,27 +50,27 @@ static const CGFloat kThumbSize  = 80.f;
     _thumb.contentMode        = UIViewContentModeScaleAspectFill;
     [_card addSubview:_thumb];
 
-    // ── название ─────────────────────────────────────────────────────────
+    // в”Ђв”Ђ РЅР°Р·РІР°РЅРёРµ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     _nameLabel = [[UILabel alloc] init];
     _nameLabel.font          = [UIFont boldSystemFontOfSize:15.f];
     _nameLabel.textColor     = [UIColor colorWithWhite:0.1f alpha:1.f];
     _nameLabel.numberOfLines = 1;
     [_card addSubview:_nameLabel];
 
-    // ── описание ─────────────────────────────────────────────────────────
+    // в”Ђв”Ђ РѕРїРёСЃР°РЅРёРµ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     _descLabel = [[UILabel alloc] init];
     _descLabel.font          = [UIFont systemFontOfSize:11.f];
     _descLabel.textColor     = [UIColor colorWithWhite:0.45f alpha:1.f];
     _descLabel.numberOfLines = 2;
     [_card addSubview:_descLabel];
 
-    // ── цена ──────────────────────────────────────────────────────────────
+    // в”Ђв”Ђ С†РµРЅР° в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     _priceLabel = [[UILabel alloc] init];
     _priceLabel.font      = [UIFont boldSystemFontOfSize:16.f];
     _priceLabel.textColor = [UIColor colorWithRed:0.78f green:0.05f blue:0.08f alpha:1.f];
     [_card addSubview:_priceLabel];
 
-    // ── кнопка ───────────────────────────────────────────────────────────
+    // в”Ђв”Ђ РєРЅРѕРїРєР° в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     _cartButton = [[PJGlossButton alloc] init];
     [_cartButton addTarget:self action:@selector(_cartTapped)
           forControlEvents:UIControlEventTouchUpInside];
@@ -90,7 +90,7 @@ static const CGFloat kThumbSize  = 80.f;
                                   h - kCardInset);
     _card.frame = cardFrame;
 
-    // shadowPath — ключ к плавному скроллу
+    // shadowPath вЂ” РєР»СЋС‡ Рє РїР»Р°РІРЅРѕРјСѓ СЃРєСЂРѕР»Р»Сѓ
     UIBezierPath *sp = [UIBezierPath bezierPathWithRoundedRect:_card.bounds
                                                   cornerRadius:kCardRadius];
     _card.layer.shadowPath = sp.CGPath;
@@ -117,7 +117,7 @@ static const CGFloat kThumbSize  = 80.f;
     _currentItem     = item;
     _nameLabel.text  = item.name;
     _descLabel.text  = item.itemDescription;
-    _priceLabel.text = [NSString stringWithFormat:@"%.0f руб.", item.price];
+    _priceLabel.text = [NSString stringWithFormat:@"%.0f СЂСѓР±.", item.price];
 
     _thumb.image = nil;
     if (item.imageURL.length > 0) {
@@ -145,3 +145,4 @@ static const CGFloat kThumbSize  = 80.f;
 }
 
 @end
+

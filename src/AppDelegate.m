@@ -1,5 +1,5 @@
-// AppDelegate.m
-// Papa Johns iOS 6 client
+﻿// AppDelegate.m
+// Папаша Беппе iOS 6 client
 // (c) uofist | tg: @uofist
 
 #import "AppDelegate.h"
@@ -18,13 +18,13 @@
     PJMenuViewController *menu = [[PJMenuViewController alloc] init];
     UINavigationController *nav = [[UINavigationController alloc]
                                    initWithRootViewController:menu];
-    // Красный nav bar Papa John's
+    // РљСЂР°СЃРЅС‹Р№ nav bar Papa John's
     nav.navigationBar.tintColor = [UIColor colorWithRed:0.78f green:0.05f blue:0.08f alpha:1.f];
 
     self.window.rootViewController = nav;
     [self.window makeKeyAndVisible];
 
-    // Проверяем авторизацию: если токена нет — показываем экран входа
+    // РџСЂРѕРІРµСЂСЏРµРј Р°РІС‚РѕСЂРёР·Р°С†РёСЋ: РµСЃР»Рё С‚РѕРєРµРЅР° РЅРµС‚ вЂ” РїРѕРєР°Р·С‹РІР°РµРј СЌРєСЂР°РЅ РІС…РѕРґР°
     if (![PJNetworkManager sharedManager].authToken) {
         PJAuthViewController *auth = [[PJAuthViewController alloc] init];
         auth.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -32,7 +32,7 @@
         auth.onAuthSuccess = ^{
             [weakNav dismissViewControllerAnimated:YES completion:nil];
         };
-        // presentViewController нужно вызывать после того, как window стал key
+        // presentViewController РЅСѓР¶РЅРѕ РІС‹Р·С‹РІР°С‚СЊ РїРѕСЃР»Рµ С‚РѕРіРѕ, РєР°Рє window СЃС‚Р°Р» key
         dispatch_async(dispatch_get_main_queue(), ^{
             [nav presentViewController:auth animated:NO completion:nil];
         });
@@ -42,3 +42,4 @@
 }
 
 @end
+

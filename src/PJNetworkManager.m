@@ -1,5 +1,5 @@
-// PJNetworkManager.m
-// Papa Johns iOS 6 client
+﻿// PJNetworkManager.m
+// Папаша Беппе iOS 6 client
 // (c) uofist | tg: @uofist
 
 #import "PJNetworkManager.h"
@@ -7,7 +7,7 @@
 static NSString * const kBaseURL        = @"https://raw.githubusercontent.com/Uofi113/papajohns/main";
 static NSString * const kPJAuthTokenKey = @"PJAuthToken";
 
-// ── Internal connection delegate ──────────────────────────────────────────
+// в”Ђв”Ђ Internal connection delegate в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 @interface PJConnection : NSObject <NSURLConnectionDataDelegate>
 @property (nonatomic, strong) NSMutableData *data;
 @property (nonatomic, copy)   PJSuccessBlock success;
@@ -32,7 +32,7 @@ static NSString * const kPJAuthTokenKey = @"PJAuthToken";
     dispatch_async(dispatch_get_main_queue(), ^{
         if (err) {
             NSString *raw = [[NSString alloc] initWithData:_data encoding:NSUTF8StringEncoding];
-            NSString *msg = [NSString stringWithFormat:@"API не вернул JSON. Ответ: %@", raw ? [raw substringToIndex:MIN(raw.length, 100)] : @""];
+            NSString *msg = [NSString stringWithFormat:@"API РЅРµ РІРµСЂРЅСѓР» JSON. РћС‚РІРµС‚: %@", raw ? [raw substringToIndex:MIN(raw.length, 100)] : @""];
             NSError *customErr = [NSError errorWithDomain:@"PJErrorDomain" code:err.code userInfo:@{NSLocalizedDescriptionKey: msg}];
             if (_failure) _failure(customErr);
         }
@@ -47,7 +47,7 @@ static NSString * const kPJAuthTokenKey = @"PJAuthToken";
 }
 @end
 
-// ── Manager ───────────────────────────────────────────────────────────────
+// в”Ђв”Ђ Manager в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 @interface PJNetworkManager ()
 @property (nonatomic, strong) NSMutableArray *activeConnections;
 @end
@@ -80,14 +80,14 @@ static NSString * const kPJAuthTokenKey = @"PJAuthToken";
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────
+// в”Ђв”Ђ Helpers в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 - (NSMutableURLRequest *)_requestWithPath:(NSString *)path method:(NSString *)method {
     NSString *urlStr = [kBaseURL stringByAppendingString:path];
     NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
     req.HTTPMethod = method;
     [req setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    // Papa Johns headers based on typical app
+    // Папаша Беппе headers based on typical app
     [req setValue:@"ios" forHTTPHeaderField:@"X-App-Type"];
     if (_authToken) {
         NSString *authVal = [NSString stringWithFormat:@"Bearer %@", _authToken];
@@ -96,7 +96,7 @@ static NSString * const kPJAuthTokenKey = @"PJAuthToken";
     return req;
 }
 
-// ── GET ───────────────────────────────────────────────────────────────────
+// в”Ђв”Ђ GET в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 - (void)GET:(NSString *)path parameters:(NSDictionary *)params
     success:(PJSuccessBlock)success failure:(PJFailureBlock)failure
 {
@@ -121,7 +121,7 @@ static NSString * const kPJAuthTokenKey = @"PJAuthToken";
     [self _sendRequest:req success:success failure:failure];
 }
 
-// ── POST ──────────────────────────────────────────────────────────────────
+// в”Ђв”Ђ POST в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 - (void)POST:(NSString *)path parameters:(NSDictionary *)params
      success:(PJSuccessBlock)success failure:(PJFailureBlock)failure
 {
@@ -153,7 +153,7 @@ static NSString * const kPJAuthTokenKey = @"PJAuthToken";
     [c start];
 }
 
-// ── Auth ──────────────────────────────────────────────────────────────────
+// в”Ђв”Ђ Auth в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 - (void)sendOTPToPhone:(NSString *)phone
                success:(PJSuccessBlock)success failure:(PJFailureBlock)failure
 {
@@ -174,7 +174,7 @@ static NSString * const kPJAuthTokenKey = @"PJAuthToken";
        } failure:failure];
 }
 
-// ── Catalog ───────────────────────────────────────────────────────────────
+// в”Ђв”Ђ Catalog в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 - (void)fetchMenuWithSuccess:(PJSuccessBlock)success failure:(PJFailureBlock)failure {
     [self GET:@"/menu.json" parameters:nil success:success failure:failure];
 }
@@ -183,10 +183,11 @@ static NSString * const kPJAuthTokenKey = @"PJAuthToken";
     [self GET:@"/menu.json" parameters:nil success:success failure:failure];
 }
 
-// ── Orders ────────────────────────────────────────────────────────────────
+// в”Ђв”Ђ Orders в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 - (void)placeOrder:(NSDictionary *)data
            success:(PJSuccessBlock)success failure:(PJFailureBlock)failure {
     [self GET:@"/orders.json" parameters:nil success:success failure:failure];
 }
 
 @end
+

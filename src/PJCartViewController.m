@@ -1,5 +1,5 @@
-// PJCartViewController.m
-// Papa Johns iOS 6 client
+﻿// PJCartViewController.m
+// Папаша Беппе iOS 6 client
 // (c) uofist | tg: @uofist
 
 #import "PJCartViewController.h"
@@ -8,9 +8,9 @@
 #import "PJGlossButton.h"
 #import <QuartzCore/QuartzCore.h>
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Приватная ячейка корзины (имя / цена / кнопки ±)
-// ─────────────────────────────────────────────────────────────────────────────
+// в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+// РџСЂРёРІР°С‚РЅР°СЏ СЏС‡РµР№РєР° РєРѕСЂР·РёРЅС‹ (РёРјСЏ / С†РµРЅР° / РєРЅРѕРїРєРё В±)
+// в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 @interface PJCartCell : UITableViewCell
 @property (nonatomic, strong) UILabel  *nameLabel;
 @property (nonatomic, strong) UILabel  *priceLabel;
@@ -31,38 +31,38 @@
     self.selectionStyle  = UITableViewCellSelectionStyleNone;
     self.backgroundColor = [UIColor whiteColor];
 
-    // Название
+    // РќР°Р·РІР°РЅРёРµ
     _nameLabel = [[UILabel alloc] init];
     _nameLabel.font      = [UIFont boldSystemFontOfSize:15.f];
     _nameLabel.textColor = [UIColor colorWithWhite:0.1f alpha:1.f];
     _nameLabel.numberOfLines = 2;
     [self.contentView addSubview:_nameLabel];
 
-    // Цена (справа)
+    // Р¦РµРЅР° (СЃРїСЂР°РІР°)
     _priceLabel = [[UILabel alloc] init];
     _priceLabel.font          = [UIFont boldSystemFontOfSize:15.f];
     _priceLabel.textColor     = [UIColor colorWithRed:0.78f green:0.05f blue:0.08f alpha:1.f];
     _priceLabel.textAlignment = NSTextAlignmentRight;
     [self.contentView addSubview:_priceLabel];
 
-    // Кнопка −
+    // РљРЅРѕРїРєР° в€’
     _minusBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _minusBtn.backgroundColor    = [UIColor colorWithRed:0.78f green:0.05f blue:0.08f alpha:1.f];
     _minusBtn.layer.cornerRadius = 14.f;
     _minusBtn.titleLabel.font    = [UIFont boldSystemFontOfSize:20.f];
-    [_minusBtn setTitle:@"−" forState:UIControlStateNormal];
+    [_minusBtn setTitle:@"в€’" forState:UIControlStateNormal];
     [_minusBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_minusBtn addTarget:self action:@selector(_minus) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:_minusBtn];
 
-    // Количество
+    // РљРѕР»РёС‡РµСЃС‚РІРѕ
     _qtyLabel = [[UILabel alloc] init];
     _qtyLabel.font          = [UIFont boldSystemFontOfSize:18.f];
     _qtyLabel.textAlignment = NSTextAlignmentCenter;
     _qtyLabel.textColor     = [UIColor colorWithWhite:0.1f alpha:1.f];
     [self.contentView addSubview:_qtyLabel];
 
-    // Кнопка +
+    // РљРЅРѕРїРєР° +
     _plusBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _plusBtn.backgroundColor    = [UIColor colorWithRed:0.78f green:0.05f blue:0.08f alpha:1.f];
     _plusBtn.layer.cornerRadius = 14.f;
@@ -92,7 +92,7 @@
 
 - (void)configureWithCartItem:(PJCartItem *)ci {
     _nameLabel.text  = ci.menuItem.name;
-    _priceLabel.text = [NSString stringWithFormat:@"%.0f руб.", ci.totalPrice];
+    _priceLabel.text = [NSString stringWithFormat:@"%.0f СЂСѓР±.", ci.totalPrice];
     _qtyLabel.text   = [NSString stringWithFormat:@"%ld", (long)ci.quantity];
 }
 
@@ -101,9 +101,9 @@
 
 @end
 
-// ─────────────────────────────────────────────────────────────────────────────
+// в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 // PJCartViewController
-// ─────────────────────────────────────────────────────────────────────────────
+// в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 static NSString * const kCartCellID = @"PJCartCell";
 
 @interface PJCartViewController ()
@@ -115,7 +115,7 @@ static NSString * const kCartCellID = @"PJCartCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"Корзина";
+    self.title = @"РљРѕСЂР·РёРЅР°";
     self.tableView.rowHeight        = 82.f;
     self.tableView.backgroundColor  =
         [UIColor colorWithRed:0.96f green:0.94f blue:0.91f alpha:1.f];
@@ -125,12 +125,12 @@ static NSString * const kCartCellID = @"PJCartCell";
     }
     [self.tableView registerClass:[PJCartCell class] forCellReuseIdentifier:kCartCellID];
 
-    // ── Footer: итого + кнопка заказа ────────────────────────────────────
+    // в”Ђв”Ђ Footer: РёС‚РѕРіРѕ + РєРЅРѕРїРєР° Р·Р°РєР°Р·Р° в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     CGFloat fW = self.view.bounds.size.width;
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0.f, 0.f, fW, 110.f)];
     footer.backgroundColor = [UIColor whiteColor];
 
-    // тонкая линия сверху
+    // С‚РѕРЅРєР°СЏ Р»РёРЅРёСЏ СЃРІРµСЂС…Сѓ
     UIView *sep = [[UIView alloc] initWithFrame:CGRectMake(0, 0, fW, 1)];
     sep.backgroundColor = [UIColor colorWithWhite:0.85f alpha:1.f];
     [footer addSubview:sep];
@@ -142,7 +142,7 @@ static NSString * const kCartCellID = @"PJCartCell";
 
     PJGlossButton *orderBtn = [[PJGlossButton alloc]
         initWithFrame:CGRectMake(16.f, 46.f, fW - 32.f, 50.f)];
-    [orderBtn setTitle:@"Оформить заказ" forState:UIControlStateNormal];
+    [orderBtn setTitle:@"РћС„РѕСЂРјРёС‚СЊ Р·Р°РєР°Р·" forState:UIControlStateNormal];
     orderBtn.titleLabel.font = [UIFont boldSystemFontOfSize:16.f];
     [orderBtn addTarget:self action:@selector(_placeOrder)
        forControlEvents:UIControlEventTouchUpInside];
@@ -163,12 +163,12 @@ static NSString * const kCartCellID = @"PJCartCell";
 
 - (void)_reload {
     _cartItems = [PJCartManager sharedManager].cartItems;
-    _totalLabel.text = [NSString stringWithFormat:@"Итого: %.0f руб.",
+    _totalLabel.text = [NSString stringWithFormat:@"РС‚РѕРіРѕ: %.0f СЂСѓР±.",
                         [PJCartManager sharedManager].totalPrice];
     [self.tableView reloadData];
 }
 
-// ── DataSource ────────────────────────────────────────────────────────────
+// в”Ђв”Ђ DataSource в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)s {
     return (NSInteger)_cartItems.count;
 }
@@ -188,11 +188,11 @@ static NSString * const kCartCellID = @"PJCartCell";
     return cell;
 }
 
-// ── Оформить заказ ────────────────────────────────────────────────────────
+// в”Ђв”Ђ РћС„РѕСЂРјРёС‚СЊ Р·Р°РєР°Р· в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 - (void)_placeOrder {
     if (!_cartItems.count) {
-        UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"Корзина пуста"
-            message:@"Добавьте товары из меню!"
+        UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"РљРѕСЂР·РёРЅР° РїСѓСЃС‚Р°"
+            message:@"Р”РѕР±Р°РІСЊС‚Рµ С‚РѕРІР°СЂС‹ РёР· РјРµРЅСЋ!"
             delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [a show]; return;
     }
@@ -213,8 +213,8 @@ static NSString * const kCartCellID = @"PJCartCell";
         success:^(id resp) {
             [[PJCartManager sharedManager] clearCart];
             UIAlertView *a = [[UIAlertView alloc]
-                initWithTitle:@"🍕 Заказ принят!"
-                      message:@"Курьер скоро выедет. Приятного аппетита!"
+                initWithTitle:@"рџЌ• Р—Р°РєР°Р· РїСЂРёРЅСЏС‚!"
+                      message:@"РљСѓСЂСЊРµСЂ СЃРєРѕСЂРѕ РІС‹РµРґРµС‚. РџСЂРёСЏС‚РЅРѕРіРѕ Р°РїРїРµС‚РёС‚Р°!"
                      delegate:nil
             cancelButtonTitle:@"OK"
             otherButtonTitles:nil];
@@ -222,7 +222,7 @@ static NSString * const kCartCellID = @"PJCartCell";
             [self.navigationController popViewControllerAnimated:YES];
         }
         failure:^(NSError *err) {
-            UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"Ошибка"
+            UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"РћС€РёР±РєР°"
                 message:err.localizedDescription
                 delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [a show];
@@ -230,3 +230,4 @@ static NSString * const kCartCellID = @"PJCartCell";
 }
 
 @end
+

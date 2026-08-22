@@ -1,8 +1,8 @@
-// PJAuthViewController.m
-// Papa Johns iOS 6 client
+﻿// PJAuthViewController.m
+// Папаша Беппе iOS 6 client
 // (c) uofist | tg: @uofist
 //
-// Скевоморфный экран входа: красный кожаный фон, стеклянная карточка.
+// РЎРєРµРІРѕРјРѕСЂС„РЅС‹Р№ СЌРєСЂР°РЅ РІС…РѕРґР°: РєСЂР°СЃРЅС‹Р№ РєРѕР¶Р°РЅС‹Р№ С„РѕРЅ, СЃС‚РµРєР»СЏРЅРЅР°СЏ РєР°СЂС‚РѕС‡РєР°.
 
 #import "PJAuthViewController.h"
 #import "PJNetworkManager.h"
@@ -25,7 +25,7 @@
 
     CGFloat W = self.view.bounds.size.width;
 
-    // ── Фон: красный кожаный градиент ──────────────────────────────────
+    // в”Ђв”Ђ Р¤РѕРЅ: РєСЂР°СЃРЅС‹Р№ РєРѕР¶Р°РЅС‹Р№ РіСЂР°РґРёРµРЅС‚ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     CAGradientLayer *bg = [CAGradientLayer layer];
     bg.frame = self.view.bounds;
     bg.colors = @[
@@ -34,7 +34,7 @@
     ];
     [self.view.layer insertSublayer:bg atIndex:0];
 
-    // шум-текстура поверх (имитация кожи)
+    // С€СѓРј-С‚РµРєСЃС‚СѓСЂР° РїРѕРІРµСЂС… (РёРјРёС‚Р°С†РёСЏ РєРѕР¶Рё)
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(4, 4), NO, 0);
     srand48(7);
     for (int i = 0; i < 16; i++) {
@@ -50,7 +50,7 @@
     nl.contentsGravity = kCAGravityResize;
     [self.view.layer insertSublayer:nl atIndex:1];
 
-    // ── Логотип ──────────────────────────────────────────────────────────
+    // в”Ђв”Ђ Р›РѕРіРѕС‚РёРї в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     UIImageView *logoView = [[UIImageView alloc] initWithFrame:CGRectMake(20.f, 60.f, W - 40.f, 70.f)];
     logoView.contentMode = UIViewContentModeScaleAspectFit;
     logoView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"logo" ofType:@"png"]];
@@ -58,13 +58,13 @@
 
     UILabel *hint = [[UILabel alloc] initWithFrame:CGRectMake(20.f, 140.f, W - 40.f, 20.f)];
     hint.backgroundColor = [UIColor clearColor];
-    hint.text          = @"Войдите, чтобы оформить заказ";
+    hint.text          = @"Р’РѕР№РґРёС‚Рµ, С‡С‚РѕР±С‹ РѕС„РѕСЂРјРёС‚СЊ Р·Р°РєР°Р·";
     hint.font          = [UIFont systemFontOfSize:13.f];
     hint.textColor     = [UIColor colorWithWhite:1.f alpha:0.55f];
     hint.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:hint];
 
-    // ── Карточка ─────────────────────────────────────────────────────────
+    // в”Ђв”Ђ РљР°СЂС‚РѕС‡РєР° в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     CGFloat cW = W - 40.f;
     _card = [[UIView alloc] initWithFrame:CGRectMake(20.f, 172.f, cW, 260.f)];
     _card.backgroundColor    = [UIColor colorWithWhite:1.f alpha:0.10f];
@@ -75,7 +75,7 @@
 
     CGFloat pad = 15.f;
 
-    // Телефон
+    // РўРµР»РµС„РѕРЅ
     _phoneField = [[UITextField alloc] initWithFrame:CGRectMake(pad, 18.f, cW - pad*2, 46.f)];
     _phoneField.borderStyle = UITextBorderStyleRoundedRect;
     _phoneField.placeholder   = @"+7 (___) ___-__-__";
@@ -84,49 +84,49 @@
     _phoneField.font          = [UIFont systemFontOfSize:18.f];
     [_card addSubview:_phoneField];
 
-    // Кнопка "Получить код"
+    // РљРЅРѕРїРєР° "РџРѕР»СѓС‡РёС‚СЊ РєРѕРґ"
     _sendBtn = [[PJGlossButton alloc] initWithFrame:CGRectMake(pad, 76.f, cW - pad*2, 46.f)];
-    [_sendBtn setTitle:@"Получить код" forState:UIControlStateNormal];
+    [_sendBtn setTitle:@"РџРѕР»СѓС‡РёС‚СЊ РєРѕРґ" forState:UIControlStateNormal];
     _sendBtn.titleLabel.font = [UIFont boldSystemFontOfSize:15.f];
     [_sendBtn addTarget:self action:@selector(_sendOTP) forControlEvents:UIControlEventTouchUpInside];
     [_card addSubview:_sendBtn];
 
-    // OTP поле (скрыто)
+    // OTP РїРѕР»Рµ (СЃРєСЂС‹С‚Рѕ)
     _otpField = [[UITextField alloc] initWithFrame:CGRectMake(pad, 136.f, cW - pad*2, 46.f)];
     _otpField.borderStyle = UITextBorderStyleRoundedRect;
-    _otpField.placeholder   = @"Код из SMS";
+    _otpField.placeholder   = @"РљРѕРґ РёР· SMS";
     _otpField.keyboardType  = UIKeyboardTypeNumberPad;
     _otpField.textAlignment = NSTextAlignmentCenter;
     _otpField.font          = [UIFont boldSystemFontOfSize:26.f];
     _otpField.hidden        = YES;
     [_card addSubview:_otpField];
 
-    // Кнопка "Войти" (скрыто)
+    // РљРЅРѕРїРєР° "Р’РѕР№С‚Рё" (СЃРєСЂС‹С‚Рѕ)
     _verifyBtn = [[PJGlossButton alloc] initWithFrame:CGRectMake(pad, 194.f, cW - pad*2, 46.f)];
-    [_verifyBtn setTitle:@"Войти" forState:UIControlStateNormal];
+    [_verifyBtn setTitle:@"Р’РѕР№С‚Рё" forState:UIControlStateNormal];
     _verifyBtn.titleLabel.font = [UIFont boldSystemFontOfSize:15.f];
     [_verifyBtn addTarget:self action:@selector(_verifyOTP) forControlEvents:UIControlEventTouchUpInside];
     _verifyBtn.hidden = YES;
     [_card addSubview:_verifyBtn];
 
-    // Спиннер
+    // РЎРїРёРЅРЅРµСЂ
     _spinner = [[UIActivityIndicatorView alloc]
                 initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     _spinner.center           = CGPointMake(W / 2.f, 460.f);
     _spinner.hidesWhenStopped = YES;
     [self.view addSubview:_spinner];
 
-    // Скрытие клавиатуры по тапу
+    // РЎРєСЂС‹С‚РёРµ РєР»Р°РІРёР°С‚СѓСЂС‹ РїРѕ С‚Р°РїСѓ
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
         initWithTarget:self action:@selector(_dismissKbd)];
     [self.view addGestureRecognizer:tap];
 }
 
-// ── Отправить OTP ─────────────────────────────────────────────────────────
+// в”Ђв”Ђ РћС‚РїСЂР°РІРёС‚СЊ OTP в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 - (void)_sendOTP {
     NSString *phone = [_phoneField.text
         stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    if (phone.length < 10) { [self _alert:@"Введите номер телефона"]; return; }
+    if (phone.length < 10) { [self _alert:@"Р’РІРµРґРёС‚Рµ РЅРѕРјРµСЂ С‚РµР»РµС„РѕРЅР°"]; return; }
 
     _sendBtn.enabled = NO;
     [_spinner startAnimating];
@@ -148,13 +148,13 @@
         }];
 }
 
-// ── Проверить OTP ─────────────────────────────────────────────────────────
+// в”Ђв”Ђ РџСЂРѕРІРµСЂРёС‚СЊ OTP в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 - (void)_verifyOTP {
     NSString *phone = [_phoneField.text
         stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *code  = [_otpField.text
         stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    if (code.length < 4) { [self _alert:@"Введите код из SMS"]; return; }
+    if (code.length < 4) { [self _alert:@"Р’РІРµРґРёС‚Рµ РєРѕРґ РёР· SMS"]; return; }
 
     _verifyBtn.enabled = NO;
     [_spinner startAnimating];
@@ -172,7 +172,7 @@
 }
 
 - (void)_alert:(NSString *)msg {
-    UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"Ошибка"
+    UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"РћС€РёР±РєР°"
                                                 message:msg
                                                delegate:nil
                                       cancelButtonTitle:@"OK"
@@ -183,3 +183,4 @@
 - (void)_dismissKbd { [self.view endEditing:YES]; }
 
 @end
+
