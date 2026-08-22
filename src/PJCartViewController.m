@@ -190,43 +190,7 @@ static NSString * const kCartCellID = @"PJCartCell";
 
 // ── Оформить заказ ────────────────────────────────────────────────────────
 - (void)_placeOrder {
-    if (!_cartItems.count) {
-        UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"Корзина пуста"
-            message:@"Добавьте товары из меню!"
-            delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [a show]; return;
-    }
-
-    NSMutableArray *items = [NSMutableArray array];
-    for (PJCartItem *ci in _cartItems) {
-        [items addObject:@{
-            @"product_id": ci.menuItem.itemId,
-            @"quantity":   @(ci.quantity)
-        }];
-    }
-    NSDictionary *payload = @{
-        @"items":        items,
-        @"payment_type": @"cash"
-    };
-
-    [[PJNetworkManager sharedManager] placeOrder:payload
-        success:^(id resp) {
-            [[PJCartManager sharedManager] clearCart];
-            UIAlertView *a = [[UIAlertView alloc]
-                initWithTitle:@"🍕 Заказ принят!"
-                      message:@"Курьер скоро выедет. Приятного аппетита!"
-                     delegate:nil
-            cancelButtonTitle:@"OK"
-            otherButtonTitles:nil];
-            [a show];
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-        failure:^(NSError *err) {
-            UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"Ошибка"
-                message:err.localizedDescription
-                delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [a show];
-        }];
+    if ([PJCartManager sharedManager].totalCount == 0) return;
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"tel:+74012312312"]];
 }
-
 @end
