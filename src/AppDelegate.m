@@ -27,7 +27,7 @@
     UITabBarController *tabs = [[UITabBarController alloc] init];
     tabs.viewControllers = @[menuNC, promosNC];
     tabs.tabBar.tintColor    = [UIColor colorWithRed:0.78f green:0.05f blue:0.08f alpha:1.f];
-    tabs.tabBar.barTintColor = [UIColor colorWithRed:0.15f green:0.12f blue:0.10f alpha:1.f];
+    
 
     self.window.rootViewController = tabs;
     [self.window makeKeyAndVisible];
