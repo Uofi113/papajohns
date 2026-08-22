@@ -14,16 +14,14 @@
     PJMenuViewController *menu = [[PJMenuViewController alloc] init];
     UINavigationController *menuNC = [[UINavigationController alloc] initWithRootViewController:menu];
     menuNC.navigationBar.tintColor = [UIColor colorWithRed:0.78f green:0.05f blue:0.08f alpha:1.f];
-    menuNC.tabBarItem = [[UITabBarItem alloc]
-        initWithTitle:@"Меню" image:nil tag:0];
+    menuNC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"\u041c\u0435\u043d\u044e" image:nil tag:0];
 
     // --- Promos tab ---
     PJPromoViewController *promos = [[PJPromoViewController alloc] initWithStyle:UITableViewStylePlain];
     UINavigationController *promosNC = [[UINavigationController alloc] initWithRootViewController:promos];
     promosNC.navigationBar.tintColor = [UIColor colorWithRed:0.78f green:0.05f blue:0.08f alpha:1.f];
-    promosNC.tabBarItem = [[UITabBarItem alloc]
-        initWithTitle:@"Акции" image:nil tag:1];
-    promos.navigationItem.title = @"Акции";
+    promosNC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"\u0410\u043a\u0446\u0438\u0438" image:nil tag:1];
+    promos.navigationItem.title = @"\u0410\u043a\u0446\u0438\u0438";
 
     // --- Tab Bar ---
     UITabBarController *tabs = [[UITabBarController alloc] init];

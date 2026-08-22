@@ -200,10 +200,7 @@
 
 // ── PJPromoViewController ────────────────────────────────────────────────────
 
-@interface PJPromoViewController : UITableViewController
-@property (nonatomic, strong) NSArray *promos;
-- (void)reloadWithPromos:(NSArray *)promos;
-@end
+#import "PJPromoViewController.h"
 
 @implementation PJPromoViewController
 
