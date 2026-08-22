@@ -1,4 +1,4 @@
-export ARCHS = armv7 armv7s
+﻿export ARCHS = armv7 armv7s
 export TARGET = iphone:clang:latest:6.0
 
 include $(THEOS)/makefiles/common.mk
@@ -15,7 +15,6 @@ PapashaBeppe_FILES = src/main.m \
                   src/PJMenuCell.m \
                   src/PJSberCell.m \
                   src/PJMenuViewController.m \
-                  
                   src/PJItemDetailViewController.m \
                   src/PJCartViewController.m
 
