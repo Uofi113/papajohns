@@ -106,7 +106,7 @@ static const CGFloat kThumbSize  = 80.f;
     _nameLabel.frame  = CGRectMake(textX, 10.f, textW, 20.f);
     
     // To avoid overlapping the button, we constrain the width of the descLabel.
-    CGFloat descW = _cartButton.hidden ? textW : textW - btnW - 4.f;
+    CGFloat descW = _cartButton.hidden ? textW : textW - 90.f - 4.f;
     _descLabel.frame  = CGRectMake(textX, 33.f, descW, 40.f);
     _priceLabel.frame = CGRectMake(textX, 74.f, 120.f, 22.f);
 
