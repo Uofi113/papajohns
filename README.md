@@ -2,7 +2,6 @@
   <img src="https://img.shields.io/badge/platform-iOS%206.0-red?style=flat-square&logo=apple" />
   <img src="https://img.shields.io/badge/built%20with-Theos-orange?style=flat-square" />
   <img src="https://img.shields.io/badge/language-Objective--C-blue?style=flat-square" />
-  <img src="https://img.shields.io/github/actions/workflow/status/uofi113/papajohns/build.yml?style=flat-square&label=build" />
 </p>
 
 <h1 align="center">🍕 Papa Johns iOS 6</h1>
