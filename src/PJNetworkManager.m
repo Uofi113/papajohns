@@ -132,37 +132,47 @@ static NSString * const kPJAuthTokenKey = @"PJAuthToken";
 - (void)sendOTPToPhone:(NSString *)phone
                success:(PJSuccessBlock)success failure:(PJFailureBlock)failure
 {
-    [self POST:@"/auth/phone/request"
-    parameters:@{@"phone": phone}
-       success:success failure:failure];
+    // MOCK: Success immediately
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        if (success) success(@{@"status": @"ok"});
+    });
 }
 
 - (void)verifyOTP:(NSString *)code phone:(NSString *)phone
           success:(PJSuccessBlock)success failure:(PJFailureBlock)failure
 {
-    [self POST:@"/auth/phone/confirm"
-    parameters:@{@"phone": phone, @"code": code}
-       success:^(id resp) {
-           NSString *token = resp[@"token"];
-           if (token) self.authToken = token;
-           if (success) success(resp);
-       } failure:failure];
+    // MOCK: Success immediately
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        self.authToken = @"mock_token_123";
+        if (success) success(@{@"token": @"mock_token_123"});
+    });
 }
 
 // ── Catalog ───────────────────────────────────────────────────────────────
 - (void)fetchMenuWithSuccess:(PJSuccessBlock)success failure:(PJFailureBlock)failure {
-    [self GET:@"/menu" parameters:nil success:success failure:failure];
+    // MOCK: Return dummy pizza data
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        NSArray *items = @[
+            @{@"id": @"1", @"name": @"Пепперони", @"description": @"Пикантная пепперони, моцарелла, томатный соус", @"price": @(799), @"image": @"https://papajohns.ru/images/catalog/papajohns-pizza-pepperoni.png"},
+            @{@"id": @"2", @"name": @"Мясная", @"description": @"Бекон, ветчина, пепперони, моцарелла", @"price": @(899), @"image": @"https://papajohns.ru/images/catalog/papajohns-pizza-meat.png"},
+            @{@"id": @"3", @"name": @"Маргарита", @"description": @"Увеличенная порция моцареллы, томаты", @"price": @(599), @"image": @"https://papajohns.ru/images/catalog/papajohns-pizza-margarita.png"}
+        ];
+        if (success) success(items);
+    });
 }
 
 - (void)fetchProduct:(NSString *)pid success:(PJSuccessBlock)success failure:(PJFailureBlock)failure {
-    NSString *path = [@"/products/" stringByAppendingString:pid];
-    [self GET:path parameters:nil success:success failure:failure];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        if (success) success(@{@"id": pid, @"name": @"Пицца", @"description": @"Описание...", @"price": @(799)});
+    });
 }
 
 // ── Orders ────────────────────────────────────────────────────────────────
 - (void)placeOrder:(NSDictionary *)data
            success:(PJSuccessBlock)success failure:(PJFailureBlock)failure {
-    [self POST:@"/orders" parameters:data success:success failure:failure];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        if (success) success(@{@"status": @"ok"});
+    });
 }
 
 @end
