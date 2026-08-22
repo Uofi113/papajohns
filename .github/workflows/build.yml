@@ -17,7 +17,7 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update -q
-          sudo apt-get install -y -q fakeroot dpkg-dev curl git xz-utils python3
+          sudo apt-get install -y -q fakeroot dpkg-dev curl git xz-utils jq
 
       - name: Install Theos
         run: |
@@ -27,20 +27,9 @@ jobs:
           echo "THEOS=$THEOS"                      >> "$GITHUB_ENV"
           echo "THEOS_MAKE_PATH=$THEOS/makefiles"   >> "$GITHUB_ENV"
 
-      # Тулчейн — это отдельный репо theos/toolchain: кросс-компилятор
-      # arm-apple-ios для Linux. Без него /opt/theos/toolchain/linux/iphone/bin/clang
-      # не существует и сборка падает с Error 127.
       - name: Download Theos toolchain
         run: |
-          TC_URL=$(curl -fsSL \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/theos/toolchain/releases/latest" \
-            | python3 -c "
-import sys, json
-data = json.load(sys.stdin)
-for a in data.get('assets', []):
-    print(a['browser_download_url']); break
-")
+          TC_URL=$(curl -fsSL -H "Accept: application/vnd.github+json" https://api.github.com/repos/theos/toolchain/releases/latest | jq -r '.assets[0].browser_download_url')
           echo "Toolchain URL: $TC_URL"
           curl -fsSL "$TC_URL" -o /tmp/toolchain.tar.xz
           mkdir -p "$THEOS/toolchain/linux/iphone"
@@ -50,22 +39,10 @@ for a in data.get('assets', []):
       - name: Download iOS SDK
         run: |
           mkdir -p "$THEOS/sdks"
-          SDK_URL=$(curl -fsSL \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/theos/sdks/releases/latest" \
-            | python3 -c "
-import sys, json
-data = json.load(sys.stdin)
-assets = data.get('assets', [])
-# iPhoneOS14.x — последний SDK с поддержкой armv7
-for a in assets:
-    if 'iPhoneOS14' in a['name'] and a['name'].endswith('.tar.xz'):
-        print(a['browser_download_url']); raise SystemExit
-# fallback: первый .tar.xz
-for a in assets:
-    if a['name'].endswith('.tar.xz'):
-        print(a['browser_download_url']); raise SystemExit
-")
+          SDK_URL=$(curl -fsSL -H "Accept: application/vnd.github+json" https://api.github.com/repos/theos/sdks/releases/latest | jq -r '.assets[] | select(.name | contains("iPhoneOS14") and endswith(".tar.xz")) | .browser_download_url' | head -n 1)
+          if [ -z "$SDK_URL" ]; then
+            SDK_URL=$(curl -fsSL -H "Accept: application/vnd.github+json" https://api.github.com/repos/theos/sdks/releases/latest | jq -r '.assets[] | select(.name | endswith(".tar.xz")) | .browser_download_url' | head -n 1)
+          fi
           echo "SDK URL: $SDK_URL"
           curl -fsSL "$SDK_URL" -o /tmp/sdk.tar.xz
           tar -xJf /tmp/sdk.tar.xz -C "$THEOS/sdks"
