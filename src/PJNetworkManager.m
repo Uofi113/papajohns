@@ -70,10 +70,30 @@ static NSString * const kPJAuthTokenKey = @"PJAuthToken";
     return self;
 }
 
-- (void)setAuthToken:(NSString *)token {
-    _authToken = [token copy];
-    [[NSUserDefaults standardUserDefaults] setObject:token forKey:kPJAuthTokenKey];
+- (void)setAuthToken:(NSString *)authToken {
+    _authToken = [authToken copy];
+    if (authToken) {
+        [[NSUserDefaults standardUserDefaults] setObject:authToken forKey:kPJAuthTokenKey];
+    } else {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kPJAuthTokenKey];
+    }
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────
+- (NSMutableURLRequest *)_requestWithPath:(NSString *)path method:(NSString *)method {
+    NSString *urlStr = [kBaseURL stringByAppendingString:path];
+    NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
+    req.HTTPMethod = method;
+    [req setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    // Papa Johns headers based on typical app
+    [req setValue:@"ios" forHTTPHeaderField:@"X-App-Type"];
+    if (_authToken) {
+        NSString *authVal = [NSString stringWithFormat:@"Bearer %@", _authToken];
+        [req setValue:authVal forHTTPHeaderField:@"Authorization"];
+    }
+    return req;
 }
 
 // ── GET ───────────────────────────────────────────────────────────────────
@@ -139,9 +159,7 @@ static NSString * const kPJAuthTokenKey = @"PJAuthToken";
 {
     [self POST:@"/auth/phone/request"
     parameters:@{@"phone": phone}
-       success:success failure:^(NSError *err) {
-           if (success) success(@{@"status": @"ok"});
-       }];
+       success:success failure:failure];
 }
 
 - (void)verifyOTP:(NSString *)code phone:(NSString *)phone
@@ -153,40 +171,24 @@ static NSString * const kPJAuthTokenKey = @"PJAuthToken";
            NSString *token = resp[@"token"];
            if (token) self.authToken = token;
            if (success) success(resp);
-       } failure:^(NSError *err) {
-           self.authToken = @"mock_token_123";
-           if (success) success(@{@"token": @"mock_token_123"});
-       }];
+       } failure:failure];
 }
 
 // ── Catalog ───────────────────────────────────────────────────────────────
 - (void)fetchMenuWithSuccess:(PJSuccessBlock)success failure:(PJFailureBlock)failure {
     // Делаем реальный запрос к каталогу
-    [self GET:@"/catalog/menu" parameters:nil success:success failure:^(NSError *err) {
-        // FALLBACK: Если реальный API закрыт Cloudflare (возвращает HTML), используем мок-данные
-        NSLog(@"Real API failed, using mock data. Error: %@", err.localizedDescription);
-        NSArray *items = @[
-            @{@"id": @"1", @"name": @"Пепперони", @"description": @"Пикантная пепперони, моцарелла, томатный соус", @"price": @(799), @"image_url": @"local://pep.jpg"},
-            @{@"id": @"2", @"name": @"Мясная", @"description": @"Бекон, ветчина, пепперони, моцарелла", @"price": @(899), @"image_url": @"local://meat.jpg"},
-            @{@"id": @"3", @"name": @"Маргарита", @"description": @"Увеличенная порция моцареллы, томаты", @"price": @(599), @"image_url": @"local://marg.jpg"}
-        ];
-        if (success) success(@{@"items": items});
-    }];
+    [self GET:@"/catalog/menu" parameters:nil success:success failure:failure];
 }
 
 - (void)fetchProduct:(NSString *)pid success:(PJSuccessBlock)success failure:(PJFailureBlock)failure {
     NSString *path = [@"/catalog/product/" stringByAppendingString:pid];
-    [self GET:path parameters:nil success:success failure:^(NSError *err) {
-        if (success) success(@{@"id": pid, @"name": @"Пицца", @"description": @"Описание...", @"price": @(799)});
-    }];
+    [self GET:path parameters:nil success:success failure:failure];
 }
 
 // ── Orders ────────────────────────────────────────────────────────────────
 - (void)placeOrder:(NSDictionary *)data
            success:(PJSuccessBlock)success failure:(PJFailureBlock)failure {
-    [self POST:@"/orders" parameters:data success:success failure:^(NSError *err) {
-        if (success) success(@{@"status": @"ok"});
-    }];
+    [self POST:@"/orders" parameters:data success:success failure:failure];
 }
 
 @end
