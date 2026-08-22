@@ -103,13 +103,19 @@
     // ── Асинхронная загрузка фото ─────────────────────────────────────────
     if (_item.imageURL.length) {
         NSString *url = _item.imageURL;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSData  *d = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
-            UIImage *img = d ? [UIImage imageWithData:d] : nil;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [UIView animateWithDuration:0.3f animations:^{ _imageView.image = img; }];
+        if ([url hasPrefix:@"local://"]) {
+            NSString *name = [url substringFromIndex:8];
+            NSString *path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:name];
+            _imageView.image = [UIImage imageWithContentsOfFile:path];
+        } else {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                NSData  *d = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+                UIImage *img = d ? [UIImage imageWithData:d] : nil;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [UIView animateWithDuration:0.3f animations:^{ _imageView.image = img; }];
+                });
             });
-        });
+        }
     }
 
     // ── Кнопка корзины в nav bar ──────────────────────────────────────────
@@ -126,7 +132,7 @@
 
 - (void)_updateCartBtn {
     NSInteger n = [PJCartManager sharedManager].totalCount;
-    NSString *t = n > 0 ? [NSString stringWithFormat:@"🛒 %ld", (long)n] : @"🛒";
+    NSString *t = n > 0 ? [NSString stringWithFormat:@"Корзина (%ld)", (long)n] : @"Корзина";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
         initWithTitle:t style:UIBarButtonItemStyleBordered
                target:self action:@selector(_openCart)];
