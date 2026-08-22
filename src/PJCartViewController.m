@@ -191,6 +191,31 @@ static NSString * const kCartCellID = @"PJCartCell";
 // ── Оформить заказ ────────────────────────────────────────────────────────
 - (void)_placeOrder {
     if ([PJCartManager sharedManager].totalCount == 0) return;
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"tel:+74012312312"]];
+
+    // Build order summary
+    NSMutableString *summary = [NSMutableString stringWithString:@"\u0412\u0430\u0448 \u0437\u0430\u043a\u0430\u0437:\n"];
+    for (PJCartItem *ci in [PJCartManager sharedManager].cartItems) {
+        [summary appendFormat:@"\u2022 %@ x%ld \u2014 %.0f \u0440\u0443\u0431.\n",
+            ci.menuItem.name, (long)ci.quantity, ci.totalPrice];
+    }
+    [summary appendFormat:@"\n\u0418\u0442\u043e\u0433\u043e: %.0f \u0440\u0443\u0431.\n\n"
+                           "\u041f\u043e\u0437\u0432\u043e\u043d\u0438\u0442\u044c: +7 (4012) 312-312",
+        [PJCartManager sharedManager].totalPrice];
+
+    UIAlertView *alert = [[UIAlertView alloc]
+        initWithTitle:@"\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u0435 \u0437\u0430\u043a\u0430\u0437"
+              message:summary
+             delegate:self
+    cancelButtonTitle:@"\u041e\u0442\u043c\u0435\u043d\u0430"
+    otherButtonTitles:@"\u0417\u0432\u043e\u043d\u0438\u0442\u044c!", nil];
+    [alert show];
 }
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)idx {
+    if (idx == 1) {
+        NSURL *url = [NSURL URLWithString:@"tel:+74012312312"];
+        [[UIApplication sharedApplication] openURL:url];
+    }
+}
+
 @end

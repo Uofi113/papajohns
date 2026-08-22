@@ -4,5 +4,5 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PJCartViewController : UITableViewController
+@interface PJCartViewController : UITableViewController <UIAlertViewDelegate>
 @end
