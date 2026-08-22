@@ -190,48 +190,29 @@ static NSString * const kSberCellID = @"PJSberCell";
 }
 
 - (UIImage *)_woodTextureImage {
-    // Kitchen checkerboard tile pattern
-    CGFloat tileSize = 32.f;
-    CGSize sz = CGSizeMake(tileSize * 2, tileSize * 2);
+    CGSize sz = CGSizeMake(128.f, 128.f);
     UIGraphicsBeginImageContextWithOptions(sz, YES, 0.f);
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-
-    // Tile colors: classic Italian kitchen - off-white and warm dark gray
-    UIColor *light = [UIColor colorWithRed:0.94f green:0.92f blue:0.88f alpha:1.f];
-    UIColor *dark  = [UIColor colorWithRed:0.28f green:0.26f blue:0.24f alpha:1.f];
-
-    // Draw 2x2 checkerboard tile (tileable pattern)
-    NSArray *colors = @[light, dark, dark, light];
-    NSInteger idx2 = 0;
-    for (NSInteger row = 0; row < 2; row++) {
-        for (NSInteger col = 0; col < 2; col++) {
-            CGContextSetFillColorWithColor(ctx, ((UIColor *)colors[idx2]).CGColor);
-            CGContextFillRect(ctx, CGRectMake(col * tileSize, row * tileSize, tileSize, tileSize));
-            idx2++;
-        }
+    CGContextSetFillColorWithColor(ctx,
+        [UIColor colorWithRed:0.42f green:0.28f blue:0.14f alpha:1.f].CGColor);
+    CGContextFillRect(ctx, CGRectMake(0, 0, sz.width, sz.height));
+    srand48(42);
+    for (NSInteger i = 0; i < 18; i++) {
+        CGFloat y  = (sz.height / 18.f) * i + drand48() * 4.0 - 2.0;
+        CGFloat lw = 1.f + drand48() * 1.5f;
+        CGFloat a  = 0.12f + drand48() * 0.18f;
+        CGContextSetFillColorWithColor(ctx,
+            [UIColor colorWithRed:0.22f green:0.13f blue:0.05f alpha:a].CGColor);
+        CGContextFillRect(ctx, CGRectMake(0, y, sz.width, lw));
     }
-
-    // Grout lines - thin dark lines between tiles
-    CGContextSetStrokeColorWithColor(ctx, [UIColor colorWithWhite:0.15f alpha:0.6f].CGColor);
-    CGContextSetLineWidth(ctx, 1.5f);
-    // Vertical grout
-    CGContextMoveToPoint(ctx, tileSize, 0);
-    CGContextAddLineToPoint(ctx, tileSize, sz.height);
-    // Horizontal grout
-    CGContextMoveToPoint(ctx, 0, tileSize);
-    CGContextAddLineToPoint(ctx, sz.width, tileSize);
-    CGContextStrokePath(ctx);
-
-    // Subtle gloss highlight on each tile
     CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
     CGGradientRef gr = CGGradientCreateWithColors(cs, (__bridge CFArrayRef)@[
-        (id)[UIColor colorWithWhite:1.f alpha:0.12f].CGColor,
+        (id)[UIColor colorWithWhite:1.f alpha:0.10f].CGColor,
         (id)[UIColor colorWithWhite:1.f alpha:0.00f].CGColor
     ], NULL);
-    CGContextDrawLinearGradient(ctx, gr, CGPointZero, CGPointMake(0, sz.height * 0.5f), 0);
+    CGContextDrawLinearGradient(ctx, gr, CGPointZero, CGPointMake(0, sz.height * 0.4f), 0);
     CGGradientRelease(gr);
     CGColorSpaceRelease(cs);
-
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return img;
