@@ -1,8 +1,8 @@
-Package: com.uofist.papajohns
-Name: Papa Johns
+Package: com.uofist.papashabeppe
+Name: Папаша Беппе
 Version: 1.0.0
 Architecture: iphoneos-arm
-Description: Papa Johns native client for iOS 6
+Description: Папаша Беппе native client for iOS 6
 Maintainer: uofist <@uofist>
 Author: uofist <@uofist>
 Section: Applications

@@ -1,5 +1,5 @@
 // PJSberCell.h
-// Papa Johns iOS 6 client
+// Папаша Беппе iOS 6 client
 // (c) uofist | tg: @uofist
 // Пасхалка: нетапаемый баннер "Телефон за 1000 бонусов СберСпасибо"
 
