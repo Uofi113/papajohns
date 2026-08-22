@@ -4,7 +4,7 @@
 
 #import "PJNetworkManager.h"
 
-static NSString * const kBaseURL        = @"https://api.papajohns.ru/api/v1";
+static NSString * const kBaseURL        = @"https://raw.githubusercontent.com/Uofi113/papajohns/main";
 static NSString * const kPJAuthTokenKey = @"PJAuthToken";
 
 // ── Internal connection delegate ──────────────────────────────────────────
@@ -157,16 +157,16 @@ static NSString * const kPJAuthTokenKey = @"PJAuthToken";
 - (void)sendOTPToPhone:(NSString *)phone
                success:(PJSuccessBlock)success failure:(PJFailureBlock)failure
 {
-    [self POST:@"/auth/phone/request"
-    parameters:@{@"phone": phone}
+    [self GET:@"/auth.json"
+    parameters:nil
        success:success failure:failure];
 }
 
 - (void)verifyOTP:(NSString *)code phone:(NSString *)phone
           success:(PJSuccessBlock)success failure:(PJFailureBlock)failure
 {
-    [self POST:@"/auth/phone/confirm"
-    parameters:@{@"phone": phone, @"code": code}
+    [self GET:@"/auth.json"
+    parameters:nil
        success:^(id resp) {
            NSString *token = resp[@"token"];
            if (token) self.authToken = token;
@@ -176,19 +176,17 @@ static NSString * const kPJAuthTokenKey = @"PJAuthToken";
 
 // ── Catalog ───────────────────────────────────────────────────────────────
 - (void)fetchMenuWithSuccess:(PJSuccessBlock)success failure:(PJFailureBlock)failure {
-    // Делаем реальный запрос к каталогу
-    [self GET:@"/catalog/menu" parameters:nil success:success failure:failure];
+    [self GET:@"/menu.json" parameters:nil success:success failure:failure];
 }
 
 - (void)fetchProduct:(NSString *)pid success:(PJSuccessBlock)success failure:(PJFailureBlock)failure {
-    NSString *path = [@"/catalog/product/" stringByAppendingString:pid];
-    [self GET:path parameters:nil success:success failure:failure];
+    [self GET:@"/menu.json" parameters:nil success:success failure:failure];
 }
 
 // ── Orders ────────────────────────────────────────────────────────────────
 - (void)placeOrder:(NSDictionary *)data
            success:(PJSuccessBlock)success failure:(PJFailureBlock)failure {
-    [self POST:@"/orders" parameters:data success:success failure:failure];
+    [self GET:@"/orders.json" parameters:nil success:success failure:failure];
 }
 
 @end
