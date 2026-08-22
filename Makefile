@@ -3,9 +3,9 @@ export TARGET = iphone:clang:latest:6.0
 
 include $(THEOS)/makefiles/common.mk
 
-APPLICATION_NAME = PapaJohns
+APPLICATION_NAME = PapashaBeppe
 
-PapaJohns_FILES = src/main.m \
+PapashaBeppe_FILES = src/main.m \
                   src/AppDelegate.m \
                   src/PJNetworkManager.m \
                   src/PJMenuItem.m \
@@ -19,9 +19,10 @@ PapaJohns_FILES = src/main.m \
                   src/PJItemDetailViewController.m \
                   src/PJCartViewController.m
 
-PapaJohns_FRAMEWORKS = UIKit Foundation CoreGraphics QuartzCore
-PapaJohns_CFLAGS     = -fobjc-arc
-PapaJohns_INSTALL_PATH = /Applications
+PapashaBeppe_FRAMEWORKS = UIKit Foundation CoreGraphics QuartzCore
+PapashaBeppe_CFLAGS     = -fobjc-arc
+PapashaBeppe_INSTALL_PATH = /Applications
 
 include $(THEOS_MAKE_PATH)/application.mk
+
 
