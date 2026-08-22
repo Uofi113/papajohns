@@ -8,52 +8,45 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # macOS runner — единственный способ получить Apple LLVM, который умеет
+    # компилировать arm-apple-ios armv7/armv7s без стороннего кросс-компилятора.
+    runs-on: macos-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update -q
-          sudo apt-get install -y -q fakeroot dpkg-dev curl git xz-utils
-
       - name: Install Theos
         run: |
-          export THEOS=/opt/theos
-          sudo git clone --recursive https://github.com/theos/theos.git "$THEOS"
-          sudo chmod -R 777 "$THEOS"
-          echo "THEOS=$THEOS"               >> "$GITHUB_ENV"
-          echo "THEOS_MAKE_PATH=$THEOS/makefiles" >> "$GITHUB_ENV"
+          export THEOS=~/theos
+          git clone --recursive https://github.com/theos/theos.git "$THEOS"
+          echo "THEOS=$THEOS"                     >> "$GITHUB_ENV"
+          echo "THEOS_MAKE_PATH=$THEOS/makefiles"  >> "$GITHUB_ENV"
 
       - name: Download iOS SDK
         run: |
           mkdir -p "$THEOS/sdks"
 
-          # Берём URL последнего релизного ассета из theos/sdks через API.
+          # Берём актуальный URL из GitHub Releases API (не угадываем тег вручную).
           # Предпочитаем iPhoneOS14.x — последний SDK с поддержкой armv7.
           ASSET_URL=$(curl -fsSL \
             -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/theos/sdks/releases/latest \
+            "https://api.github.com/repos/theos/sdks/releases/latest" \
             | python3 -c "
-          import sys, json
-          data = json.load(sys.stdin)
-          assets = data.get('assets', [])
-          # prefer 14.x for armv7 support
-          for a in assets:
-              if 'iPhoneOS14' in a['name'] and a['name'].endswith('.tar.xz'):
-                  print(a['browser_download_url']); raise SystemExit
-          # fallback: first .tar.xz asset
-          for a in assets:
-              if a['name'].endswith('.tar.xz'):
-                  print(a['browser_download_url']); raise SystemExit
-          ")
-
-          echo "SDK URL: $ASSET_URL"
+import sys, json
+data = json.load(sys.stdin)
+assets = data.get('assets', [])
+for a in assets:
+    if 'iPhoneOS14' in a['name'] and a['name'].endswith('.tar.xz'):
+        print(a['browser_download_url']); raise SystemExit
+for a in assets:
+    if a['name'].endswith('.tar.xz'):
+        print(a['browser_download_url']); raise SystemExit
+")
+          echo "SDK: $ASSET_URL"
           curl -fsSL "$ASSET_URL" -o /tmp/sdk.tar.xz
           tar -xJf /tmp/sdk.tar.xz -C "$THEOS/sdks"
-          echo "Installed SDKs: $(ls $THEOS/sdks)"
+          echo "Installed: $(ls $THEOS/sdks)"
 
       - name: Build package
         run: make package FINALPACKAGE=1 2>&1
