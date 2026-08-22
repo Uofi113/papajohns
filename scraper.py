@@ -1,71 +1,120 @@
-﻿import requests, json, re, sys
+﻿import urllib.request, json, re, sys
 
-headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-    "Accept-Language": "ru-RU,ru;q=0.9",
-}
+raw = urllib.request.urlopen(urllib.request.Request(
+    "https://pabeppe.ru/",
+    headers={"User-Agent":"Mozilla/5.0","Accept-Language":"ru-RU,ru;q=0.9"}
+)).read()
 
-resp = requests.get("https://pabeppe.ru/", headers=headers, timeout=30)
-html = resp.text
+m = re.search(rb'<script[^>]+id="__NUXT_DATA__"[^>]*>(.*?)</script>', raw, re.DOTALL)
+flat = json.loads(m.group(1).decode("utf-8"))
+CDN = "https://cdn.arora.pro/m"
 
-items = []
+def rv(idx, depth=0):
+    if depth > 10 or not isinstance(idx, int) or idx < 0 or idx >= len(flat): return idx
+    v = flat[idx]
+    if isinstance(v, dict): return {k: rv(vi, depth+1) for k, vi in v.items()}
+    if isinstance(v, list):
+        if len(v) >= 2 and isinstance(v[0], str) and v[0] in ("ShallowReactive","ShallowReadonly","Reactive","Ref"):
+            return rv(v[1], depth+1)
+        return [rv(vi, depth+1) for vi in v]
+    return v
 
-nuxt_match = re.search(r'<script[^>]+id="__NUXT_DATA__"[^>]*>(.*?)</script>', html, re.DOTALL)
-if nuxt_match:
-    print("Found __NUXT_DATA__ block")
+def get_img(obj):
+    if not isinstance(obj, dict): return ""
+    p = obj.get("Path","") or ""
+    d = obj.get("Domain", CDN)
+    if p and p not in ("//","",None):
+        return (d+p) if not p.startswith("http") else p
+    return ""
+
+# --- Extract menu categories ---
+categories = []
+seen_pids = set()
+
+for i, v in enumerate(flat):
+    if not isinstance(v, dict): continue
+    keys = set(v.keys())
+    if not keys >= {"Items","Title","Id","Link","Groups","ProductsCountTotal"}: continue
     try:
-        flat = json.loads(nuxt_match.group(1).strip())
-        if not isinstance(flat, list):
-            flat = []
-        seen_names = set()
-        id_counter = 1
-        i = 0
-        while i < len(flat):
-            val = flat[i]
-            if isinstance(val, str) and 5 < len(val) < 80 and re.search(r"[А-Яа-яёЁ]", val):
-                for j in range(i + 1, min(i + 25, len(flat))):
-                    cand = flat[j]
-                    if isinstance(cand, (int, float)) and 300 <= cand <= 3000:
-                        name = val.strip()
-                        if name not in seen_names and not any(c in name for c in ["/", "<", "@", "http", "www", "{"]):
-                            seen_names.add(name)
-                            img_url = ""
-                            for k in range(max(0, i - 15), min(len(flat), i + 35)):
-                                if isinstance(flat[k], str) and re.search(r"\.(jpg|png|webp)", flat[k], re.I) and "http" in flat[k]:
-                                    img_url = flat[k]
-                                    break
-                            desc = ""
-                            for k in range(i + 1, min(len(flat), i + 20)):
-                                if isinstance(flat[k], str) and 20 < len(flat[k]) < 300 and flat[k] != name:
-                                    desc = flat[k].strip()
-                                    break
-                            items.append({
-                                "id": str(id_counter),
-                                "name": name,
-                                "description": desc or "Свежая пицца из Калининграда",
-                                "price": int(cand),
-                                "image_url": img_url or "local://pep.jpg"
-                            })
-                            id_counter += 1
-                        break
-            i += 1
-    except Exception as e:
-        print(f"Parse error: {e}")
-else:
-    print("No __NUXT_DATA__ block found")
-    print("HTML snippet:", html[:3000])
+        title_idx = v.get("Title")
+        title = flat[title_idx] if isinstance(title_idx, int) else title_idx
+        if not isinstance(title, str) or not title.strip(): continue
+        items_list = flat[v["Items"]] if isinstance(v["Items"], int) else v["Items"]
+        if not isinstance(items_list, list) or not items_list: continue
+        gid_raw = v.get("Id")
+        gid = flat[gid_raw] if isinstance(gid_raw, int) else gid_raw
+        products = []
+        for item_idx in items_list:
+            ir = flat[item_idx] if isinstance(item_idx, int) else item_idx
+            if not isinstance(ir, dict): continue
+            api_t_idx = ir.get("ApiGroupItemType")
+            if (flat[api_t_idx] if isinstance(api_t_idx, int) else api_t_idx) != "ApiGroupItemProduct": continue
+            sl_idx = ir.get("StopList")
+            if flat[sl_idx] if isinstance(sl_idx, int) else sl_idx: continue
+            pid_raw = ir.get("Id")
+            pid = flat[pid_raw] if isinstance(pid_raw, int) else pid_raw
+            if pid in seen_pids: continue
+            seen_pids.add(pid)
+            name_raw = ir.get("Title")
+            name = flat[name_raw] if isinstance(name_raw, int) else name_raw
+            price_raw = ir.get("Price")
+            price = flat[price_raw] if isinstance(price_raw, int) else price_raw
+            desc_raw = ir.get("Description")
+            desc = flat[desc_raw] if isinstance(desc_raw, int) else desc_raw
+            img_raw = ir.get("Image")
+            img_obj = rv(img_raw) if isinstance(img_raw, int) else img_raw
+            img_url = get_img(img_obj)
+            if not isinstance(name, str) or not name: continue
+            if not isinstance(price, (int,float)) or price <= 0: continue
+            products.append({"id":str(pid),"name":name.strip(),"description":(desc.strip() if isinstance(desc,str) else ""),"price":int(price),"image_url":img_url})
+        if products:
+            categories.append({"id":str(gid),"title":title.strip(),"items":products})
+    except: pass
 
-if items:
-    seen = set()
-    unique = []
-    for item in items:
-        if item["name"] not in seen and len(item["name"]) > 3:
-            seen.add(item["name"])
-            unique.append(item)
-    menu = {"items": unique[:40]}
-    with open("menu.json", "w", encoding="utf-8") as f:
-        json.dump(menu, f, ensure_ascii=False, indent=4)
-    print(f"SUCCESS: Saved {len(unique)} items to menu.json")
-else:
-    print("ERROR: No items parsed.")
-    sys.exit(1)
+# --- Extract promotions/actions ---
+promos = []
+seen_promo_ids = set()
+
+for i, v in enumerate(flat):
+    if not isinstance(v, dict): continue
+    keys = set(v.keys())
+    if not keys >= {"Title","Description","DateBegin","Active","Link","Teaser"}: continue
+    try:
+        r = rv(i)
+        title = r.get("Title","")
+        if not isinstance(title, str) or not title.strip(): continue
+        promo_id = str(r.get("ID", i))
+        if promo_id in seen_promo_ids: continue
+        seen_promo_ids.add(promo_id)
+        teaser = r.get("Teaser","") or ""
+        desc = r.get("Description","") or ""
+        # Strip HTML tags from description
+        desc_clean = re.sub(r'<[^>]+>', '', desc).replace('\n','').strip()
+        teaser_clean = re.sub(r'<[^>]+>', '', teaser).replace('\n','').strip()
+        img_url = ""
+        for key in ["ImageHorizontalSmallInfo","ImageBigBannerInfo","ImageSmallEventInfo"]:
+            obj = r.get(key)
+            if isinstance(obj, dict):
+                img_url = get_img(obj)
+                if img_url: break
+        if not img_url:
+            for key in ["ImageSmallEvent","ImageHorizontalSmall"]:
+                obj = r.get(key)
+                if isinstance(obj, dict):
+                    img_url = get_img(obj)
+                    if img_url: break
+        promos.append({
+            "id": promo_id,
+            "title": title.strip(),
+            "teaser": teaser_clean[:200],
+            "description": desc_clean[:500],
+            "image_url": img_url
+        })
+    except: pass
+
+# Write combined menu.json
+menu = {"categories": categories, "promotions": promos}
+with open("menu.json","w",encoding="utf-8") as f:
+    json.dump(menu, f, ensure_ascii=False, indent=4)
+
+sys.stderr.write(f"SUCCESS: {len(categories)} categories, {sum(len(c['items']) for c in categories)} products, {len(promos)} promos\n")

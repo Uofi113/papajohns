@@ -14,6 +14,8 @@ PapashaBeppe_FILES = src/main.m \
                   src/PJGlossButton.m \
                   src/PJMenuCell.m \
                   src/PJSberCell.m \
+                  src/PJPromoItem.m \
+                  src/PJPromoViewController.m \
                   src/PJMenuViewController.m \
                   src/PJItemDetailViewController.m \
                   src/PJCartViewController.m
