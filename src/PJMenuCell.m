@@ -104,11 +104,12 @@ static const CGFloat kThumbSize  = 80.f;
     CGFloat textW = CGRectGetWidth(cardFrame) - textX - pad;
 
     _nameLabel.frame  = CGRectMake(textX, 10.f, textW, 20.f);
+    _descLabel.frame  = CGRectMake(textX, 31.f, textW, 28.f);
     
-    // To avoid overlapping the button, we constrain the width of the descLabel.
-    CGFloat descW = _cartButton.hidden ? textW : textW - 90.f - 4.f;
-    _descLabel.frame  = CGRectMake(textX, 33.f, descW, 40.f);
-    _priceLabel.frame = CGRectMake(textX, 74.f, 120.f, 22.f);
+    // Align price label with the cart button. 
+    // Button is at Y = CGRectGetHeight(cardFrame) - 30.f - 10.f = 60.f (center = 75.f).
+    // Price label height is 22.f, so to center it at 75.f, Y = 64.f.
+    _priceLabel.frame = CGRectMake(textX, 64.f, 120.f, 22.f);
 
     CGFloat btnW = 90.f, btnH = 30.f;
     _cartButton.frame = CGRectMake(CGRectGetWidth(cardFrame) - btnW - pad,
