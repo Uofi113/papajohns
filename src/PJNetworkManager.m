@@ -4,7 +4,7 @@
 
 #import "PJNetworkManager.h"
 
-static NSString * const kBaseURL        = @"https://api.papajohns.ru/v2";
+static NSString * const kBaseURL        = @"https://api.papajohns.ru/api/v1";
 static NSString * const kPJAuthTokenKey = @"PJAuthToken";
 
 // ── Internal connection delegate ──────────────────────────────────────────
@@ -30,8 +30,13 @@ static NSString * const kPJAuthTokenKey = @"PJAuthToken";
     NSError *err = nil;
     id json = [NSJSONSerialization JSONObjectWithData:_data options:0 error:&err];
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (err) { if (_failure) _failure(err); }
-        else      { if (_success) _success(json); }
+        if (err) {
+            NSString *raw = [[NSString alloc] initWithData:_data encoding:NSUTF8StringEncoding];
+            NSString *msg = [NSString stringWithFormat:@"API не вернул JSON. Ответ: %@", raw ? [raw substringToIndex:MIN(raw.length, 100)] : @""];
+            NSError *customErr = [NSError errorWithDomain:@"PJErrorDomain" code:err.code userInfo:@{NSLocalizedDescriptionKey: msg}];
+            if (_failure) _failure(customErr);
+        }
+        else { if (_success) _success(json); }
     });
 }
 
@@ -132,47 +137,38 @@ static NSString * const kPJAuthTokenKey = @"PJAuthToken";
 - (void)sendOTPToPhone:(NSString *)phone
                success:(PJSuccessBlock)success failure:(PJFailureBlock)failure
 {
-    // MOCK: Success immediately
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        if (success) success(@{@"status": @"ok"});
-    });
+    [self POST:@"/auth/phone/request"
+    parameters:@{@"phone": phone}
+       success:success failure:failure];
 }
 
 - (void)verifyOTP:(NSString *)code phone:(NSString *)phone
           success:(PJSuccessBlock)success failure:(PJFailureBlock)failure
 {
-    // MOCK: Success immediately
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        self.authToken = @"mock_token_123";
-        if (success) success(@{@"token": @"mock_token_123"});
-    });
+    [self POST:@"/auth/phone/confirm"
+    parameters:@{@"phone": phone, @"code": code}
+       success:^(id resp) {
+           NSString *token = resp[@"token"];
+           if (token) self.authToken = token;
+           if (success) success(resp);
+       } failure:failure];
 }
 
 // ── Catalog ───────────────────────────────────────────────────────────────
 - (void)fetchMenuWithSuccess:(PJSuccessBlock)success failure:(PJFailureBlock)failure {
-    // MOCK: Return dummy pizza data
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        NSArray *items = @[
-            @{@"id": @"1", @"name": @"Пепперони", @"description": @"Пикантная пепперони, моцарелла, томатный соус", @"price": @(799), @"image_url": @"https://upload.wikimedia.org/wikipedia/commons/d/d1/Pepperoni_pizza.jpg"},
-            @{@"id": @"2", @"name": @"Мясная", @"description": @"Бекон, ветчина, пепперони, моцарелла", @"price": @(899), @"image_url": @"https://upload.wikimedia.org/wikipedia/commons/d/d3/Supreme_pizza.jpg"},
-            @{@"id": @"3", @"name": @"Маргарита", @"description": @"Увеличенная порция моцареллы, томаты", @"price": @(599), @"image_url": @"https://upload.wikimedia.org/wikipedia/commons/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg"}
-        ];
-        if (success) success(@{@"items": items});
-    });
+    // Делаем реальный запрос к каталогу
+    [self GET:@"/catalog/menu" parameters:nil success:success failure:failure];
 }
 
 - (void)fetchProduct:(NSString *)pid success:(PJSuccessBlock)success failure:(PJFailureBlock)failure {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        if (success) success(@{@"id": pid, @"name": @"Пицца", @"description": @"Описание...", @"price": @(799)});
-    });
+    NSString *path = [@"/catalog/product/" stringByAppendingString:pid];
+    [self GET:path parameters:nil success:success failure:failure];
 }
 
 // ── Orders ────────────────────────────────────────────────────────────────
 - (void)placeOrder:(NSDictionary *)data
            success:(PJSuccessBlock)success failure:(PJFailureBlock)failure {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        if (success) success(@{@"status": @"ok"});
-    });
+    [self POST:@"/orders" parameters:data success:success failure:failure];
 }
 
 @end

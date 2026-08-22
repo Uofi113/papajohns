@@ -66,7 +66,15 @@ static NSString * const kSberCellID = @"PJSberCell";
     [[PJNetworkManager sharedManager]
         fetchMenuWithSuccess:^(id resp) {
             [_spinner stopAnimating];
-            NSArray *raw = resp[@"items"] ?: (NSArray *)resp;
+            NSArray *raw = nil;
+            if ([resp isKindOfClass:[NSArray class]]) {
+                raw = resp;
+            } else if ([resp isKindOfClass:[NSDictionary class]]) {
+                raw = resp[@"items"] ?: resp[@"data"];
+            }
+            if (!raw || ![raw isKindOfClass:[NSArray class]]) {
+                raw = @[];
+            }
             NSMutableArray *parsed = [NSMutableArray array];
             for (NSDictionary *d in raw)
                 [parsed addObject:[PJMenuItem itemFromDictionary:d]];
@@ -75,7 +83,7 @@ static NSString * const kSberCellID = @"PJSberCell";
         }
         failure:^(NSError *err) {
             [_spinner stopAnimating];
-            UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"Ошибка"
+            UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"Ошибка API"
                 message:err.localizedDescription delegate:nil
                 cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [a show];
