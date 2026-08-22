@@ -117,7 +117,14 @@ static const CGFloat kThumbSize  = 80.f;
     _currentItem     = item;
     _nameLabel.text  = item.name;
     _descLabel.text  = item.itemDescription;
-    _priceLabel.text = [NSString stringWithFormat:@"%.0f руб.", item.price];
+    if (item.price <= 0.01f) {
+        _priceLabel.hidden = YES;
+        _cartButton.hidden = YES;
+    } else {
+        _priceLabel.hidden = NO;
+        _cartButton.hidden = NO;
+        _priceLabel.text = [NSString stringWithFormat:@"%.0f \u0440\u0443\u0431.", item.price];
+    }
 
     _thumb.image = nil;
     if (item.imageURL.length > 0) {

@@ -66,6 +66,7 @@
     price.font      = [UIFont boldSystemFontOfSize:28.f];
     price.textColor = [UIColor colorWithRed:0.78f green:0.05f blue:0.08f alpha:1.f];
     [sv addSubview:price];
+    if (_item.price <= 0.01f) { price.hidden = YES; }
     y += 48.f;
 
     // ── Разделитель ───────────────────────────────────────────────────────
@@ -96,6 +97,7 @@
     btn.titleLabel.font = [UIFont boldSystemFontOfSize:16.f];
     [btn addTarget:self action:@selector(_addToCart) forControlEvents:UIControlEventTouchUpInside];
     [sv addSubview:btn];
+    if (_item.price <= 0.01f) { btn.hidden = YES; }
     y += 72.f;
 
     sv.contentSize = CGSizeMake(W, y);

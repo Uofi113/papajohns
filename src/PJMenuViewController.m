@@ -78,20 +78,37 @@ static NSString * const kSberCellID = @"PJSberCell";
             [_spinner stopAnimating];
             if (self.refreshControl.isRefreshing) [self.refreshControl endRefreshing];
 
-            NSArray *rawCats = nil;
-            if ([resp isKindOfClass:[NSDictionary class]]) {
-                rawCats = resp[@"categories"];
-            }
             NSMutableArray *cats = [NSMutableArray array];
-            if ([rawCats isKindOfClass:[NSArray class]]) {
-                for (NSDictionary *cat in rawCats) {
-                    NSArray *rawItems = cat[@"items"];
-                    if (![rawItems isKindOfClass:[NSArray class]]) continue;
-                    NSMutableArray *items = [NSMutableArray array];
-                    for (NSDictionary *d in rawItems)
-                        [items addObject:[PJMenuItem itemFromDictionary:d]];
-                    if (items.count == 0) continue;
-                    [cats addObject:@{@"title": cat[@"title"] ?: @"\u041c\u0435\u043d\u044e", @"items": items}];
+            if ([resp isKindOfClass:[NSDictionary class]]) {
+                // Parse Promos into the first category
+                NSArray *rawPromos = resp[@"promotions"];
+                if ([rawPromos isKindOfClass:[NSArray class]] && rawPromos.count > 0) {
+                    NSMutableArray *promoItems = [NSMutableArray array];
+                    for (NSDictionary *pd in rawPromos) {
+                        NSMutableDictionary *md = [NSMutableDictionary dictionary];
+                        md[@"id"] = pd[@"id"];
+                        md[@"name"] = pd[@"title"];
+                        md[@"description"] = pd[@"teaser"] ?: pd[@"description"];
+                        md[@"price"] = @0; // 0 price will hide cart button
+                        md[@"image_url"] = pd[@"image_url"];
+                        [promoItems addObject:[PJMenuItem itemFromDictionary:md]];
+                    }
+                    if (promoItems.count > 0) {
+                        [cats addObject:@{@"title": @"\u0410\u043a\u0446\u0438\u0438", @"items": promoItems}];
+                    }
+                }
+
+                NSArray *rawCats = resp[@"categories"];
+                if ([rawCats isKindOfClass:[NSArray class]]) {
+                    for (NSDictionary *cat in rawCats) {
+                        NSArray *rawItems = cat[@"items"];
+                        if (![rawItems isKindOfClass:[NSArray class]]) continue;
+                        NSMutableArray *items = [NSMutableArray array];
+                        for (NSDictionary *d in rawItems)
+                            [items addObject:[PJMenuItem itemFromDictionary:d]];
+                        if (items.count == 0) continue;
+                        [cats addObject:@{@"title": cat[@"title"] ?: @"\u041c\u0435\u043d\u044e", @"items": items}];
+                    }
                 }
             } else {
                 // fallback old format
