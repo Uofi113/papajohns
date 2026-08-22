@@ -1,0 +1,55 @@
+﻿name: Build .deb
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q \
+            build-essential \
+            fakeroot \
+            dpkg-dev \
+            curl \
+            git \
+            xz-utils \
+            ca-certificates \
+            libc6-dev
+
+      - name: Install Theos
+        run: |
+          export THEOS=/opt/theos
+          git clone --recursive https://github.com/theos/theos.git $THEOS
+          echo "THEOS=/opt/theos" >> $GITHUB_ENV
+
+      - name: Download iOS 6.0 SDK
+        run: |
+          # Публичный архив SDK-шников от Theos community
+          SDK_URL="https://github.com/theos/sdks/releases/download/master/iPhoneOS6.0.sdk.tar.xz"
+          curl -L "$SDK_URL" -o sdk.tar.xz
+          sudo tar -xJf sdk.tar.xz -C /opt/theos/sdks/
+          rm sdk.tar.xz
+
+      - name: Build
+        run: |
+          export THEOS=/opt/theos
+          export THEOS_MAKE_PATH=/opt/theos/makefiles
+          make package FINALPACKAGE=1 2>&1
+
+      - name: Upload .deb artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PapaJohns-deb
+          path: packages/*.deb
+          if-no-files-found: error
