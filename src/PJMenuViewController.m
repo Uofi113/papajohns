@@ -10,7 +10,6 @@
 #import "PJCartManager.h"
 #import "PJItemDetailViewController.h"
 #import "PJCartViewController.h"
-#import "PJAuthViewController.h"
 
 static NSString * const kMenuCellID = @"PJMenuCell";
 static NSString * const kSberCellID = @"PJSberCell";
