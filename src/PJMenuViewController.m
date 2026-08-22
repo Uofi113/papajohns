@@ -16,6 +16,7 @@ static NSString * const kSberCellID = @"PJSberCell";
 
 @interface PJMenuViewController ()
 @property (nonatomic, strong) NSArray                 *categories;
+@property (nonatomic, strong) UIScrollView             *tabScrollView;
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
 @property (nonatomic, strong) UIBarButtonItem         *cartBtn;
 @end
@@ -50,6 +51,12 @@ static NSString * const kSberCellID = @"PJSberCell";
     UIRefreshControl *rc = [[UIRefreshControl alloc] init];
     [rc addTarget:self action:@selector(_loadMenu) forControlEvents:UIControlEventValueChanged];
     self.refreshControl = rc;
+
+    // Tab scroll view for categories (above table)
+    _tabScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44.f)];
+    _tabScrollView.showsHorizontalScrollIndicator = NO;
+    _tabScrollView.backgroundColor = [UIColor colorWithRed:0.65f green:0.05f blue:0.05f alpha:1.f];
+    self.tableView.tableHeaderView = _tabScrollView;
 
     [self _loadMenu];
 }
@@ -97,6 +104,7 @@ static NSString * const kSberCellID = @"PJSberCell";
             }
             _categories = [cats copy];
             [self.tableView reloadData];
+            [self _rebuildCategoryTabs];
         }
         failure:^(NSError *err) {
             [_spinner stopAnimating];
@@ -182,6 +190,57 @@ static NSString * const kSberCellID = @"PJSberCell";
     PJMenuItem *item = items[(NSUInteger)ip.row];
     PJItemDetailViewController *detail = [[PJItemDetailViewController alloc] initWithItem:item];
     [self.navigationController pushViewController:detail animated:YES];
+}
+
+- (void)_rebuildCategoryTabs {
+    // Remove old buttons
+    for (UIView *v in _tabScrollView.subviews) [v removeFromSuperview];
+
+    CGFloat x = 8.f;
+    CGFloat H = 44.f;
+    for (NSUInteger i = 0; i < _categories.count; i++) {
+        NSString *title = _categories[i][@"title"];
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn.tag = (NSInteger)i;
+        btn.titleLabel.font = [UIFont boldSystemFontOfSize:12.f];
+        [btn setTitle:title forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor colorWithRed:1.f green:0.8f blue:0.8f alpha:1.f] forState:UIControlStateHighlighted];
+        // Size to fit
+        [btn sizeToFit];
+        CGFloat W = MAX(btn.frame.size.width + 20.f, 60.f);
+        btn.frame = CGRectMake(x, 6.f, W, H - 12.f);
+        btn.layer.cornerRadius = 6.f;
+        btn.layer.borderWidth  = 1.f;
+        btn.layer.borderColor  = [UIColor colorWithWhite:1.f alpha:0.3f].CGColor;
+        btn.backgroundColor    = [UIColor colorWithWhite:1.f alpha:0.15f];
+        [btn addTarget:self action:@selector(_tabTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [_tabScrollView addSubview:btn];
+        x += W + 8.f;
+    }
+    _tabScrollView.contentSize = CGSizeMake(x, H);
+}
+
+- (void)_tabTapped:(UIButton *)btn {
+    NSInteger section = btn.tag;
+    if (section >= (NSInteger)_categories.count) return;
+    NSIndexPath *ip = [NSIndexPath indexPathForRow:0 inSection:section];
+    [self.tableView scrollToRowAtIndexPath:ip
+                          atScrollPosition:UITableViewScrollPositionTop
+                                  animated:YES];
+    // Highlight selected tab
+    for (UIView *v in _tabScrollView.subviews) {
+        if ([v isKindOfClass:[UIButton class]]) {
+            UIButton *b = (UIButton *)v;
+            b.backgroundColor = b.tag == section
+                ? [UIColor colorWithWhite:1.f alpha:0.35f]
+                : [UIColor colorWithWhite:1.f alpha:0.15f];
+        }
+    }
+    // Scroll tab bar to show selected button
+    UIButton *tapped = btn;
+    CGRect visible = CGRectInset(tapped.frame, -16.f, 0);
+    [_tabScrollView scrollRectToVisible:visible animated:YES];
 }
 
 - (void)_openCart {
