@@ -178,7 +178,6 @@ static NSString * const kCartCellID = @"PJCartCell";
     PJCartItem *ci   = _cartItems[(NSUInteger)ip.row];
     [cell configureWithCartItem:ci];
 
-    __weak PJCartViewController *weak = self;
     cell.onIncrement = ^{ [[PJCartManager sharedManager] incrementItem:ci.menuItem]; };
     cell.onDecrement = ^{ [[PJCartManager sharedManager] decrementItem:ci.menuItem]; };
     return cell;
