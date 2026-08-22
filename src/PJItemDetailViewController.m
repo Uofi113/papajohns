@@ -36,20 +36,24 @@
     CGFloat y = 0.f;
 
     // ── Фото ─────────────────────────────────────────────────────────────
-    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.f, y, W, 220.f)];
-    _imageView.contentMode    = UIViewContentModeScaleAspectFill;
-    _imageView.clipsToBounds  = YES;
-    _imageView.backgroundColor = [UIColor colorWithRed:0.90f green:0.85f blue:0.80f alpha:1.f];
-    [sv addSubview:_imageView];
-    // градиент-переход внизу фото
-    CAGradientLayer *fadeGrad = [CAGradientLayer layer];
-    fadeGrad.frame  = CGRectMake(0.f, 140.f, W, 80.f);
-    fadeGrad.colors = @[
-        (id)[UIColor colorWithWhite:0.f alpha:0.f].CGColor,
-        (id)[UIColor colorWithRed:0.96f green:0.94f blue:0.91f alpha:1.f].CGColor
-    ];
-    [_imageView.layer addSublayer:fadeGrad];
-    y += 220.f;
+    if (_item.imageURL.length > 0) {
+        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.f, y, W, 220.f)];
+        _imageView.contentMode    = UIViewContentModeScaleAspectFill;
+        _imageView.clipsToBounds  = YES;
+        _imageView.backgroundColor = [UIColor colorWithRed:0.90f green:0.85f blue:0.80f alpha:1.f];
+        [sv addSubview:_imageView];
+        
+        CAGradientLayer *fadeGrad = [CAGradientLayer layer];
+        fadeGrad.frame  = CGRectMake(0.f, 140.f, W, 80.f);
+        fadeGrad.colors = @[
+            (id)[UIColor colorWithWhite:0.f alpha:0.f].CGColor,
+            (id)[UIColor colorWithRed:0.96f green:0.94f blue:0.91f alpha:1.f].CGColor
+        ];
+        [_imageView.layer addSublayer:fadeGrad];
+        y += 220.f;
+    } else {
+        y += 16.f; // just some padding at the top if no image
+    }
 
     // ── Название ─────────────────────────────────────────────────────────
     UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(16.f, y + 14.f, W - 32.f, 56.f)];

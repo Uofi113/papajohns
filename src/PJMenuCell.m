@@ -100,12 +100,12 @@ static const CGFloat kThumbSize  = 80.f;
                               floorf((CGRectGetHeight(cardFrame) - kThumbSize) * 0.5f),
                               kThumbSize, kThumbSize);
 
-    CGFloat textX = CGRectGetMaxX(_thumb.frame) + pad;
+    CGFloat textX = _thumb.hidden ? pad : CGRectGetMaxX(_thumb.frame) + pad;
     CGFloat textW = CGRectGetWidth(cardFrame) - textX - pad;
 
     _nameLabel.frame  = CGRectMake(textX, 10.f, textW, 20.f);
-    _descLabel.frame  = CGRectMake(textX, 33.f, textW, 30.f);
-    _priceLabel.frame = CGRectMake(textX, 66.f, 80.f,  22.f);
+    _descLabel.frame  = CGRectMake(textX, 33.f, textW, 40.f);
+    _priceLabel.frame = CGRectMake(textX, 74.f, 120.f, 22.f);
 
     CGFloat btnW = 90.f, btnH = 30.f;
     _cartButton.frame = CGRectMake(CGRectGetWidth(cardFrame) - btnW - pad,
@@ -127,6 +127,7 @@ static const CGFloat kThumbSize  = 80.f;
     }
 
     _thumb.image = nil;
+    _thumb.hidden = (item.imageURL.length == 0);
     if (item.imageURL.length > 0) {
         if ([item.imageURL hasPrefix:@"local://"]) {
             NSString *filename = [item.imageURL substringFromIndex:8];
@@ -143,6 +144,7 @@ static const CGFloat kThumbSize  = 80.f;
             });
         }
     }
+    [self setNeedsLayout];
 }
 
 + (CGFloat)cellHeight { return kCellHeight; }
