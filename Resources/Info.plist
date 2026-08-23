@@ -9,10 +9,10 @@
     <key>CFBundleExecutable</key>
     <string>PapashaBeppe</string>
     <key>CFBundleIconFile</key>
-    <string>Icon.jpg</string>
+    <string>Icon.png</string>
     <key>CFBundleIconFiles</key>
     <array>
-        <string>Icon.jpg</string>
+        <string>Icon.png</string>
         <string>Icon@2x.jpg</string>
     </array>
     <key>CFBundleIdentifier</key>
