@@ -9,11 +9,11 @@
     <key>CFBundleExecutable</key>
     <string>PapashaBeppe</string>
     <key>CFBundleIconFile</key>
-    <string>Icon.png</string>
+    <string>Icon.jpg</string>
     <key>CFBundleIconFiles</key>
     <array>
-        <string>Icon.png</string>
-        <string>Icon@2x.png</string>
+        <string>Icon.jpg</string>
+        <string>Icon@2x.jpg</string>
     </array>
     <key>CFBundleIdentifier</key>
     <string>com.uofist.papajohns</string>
