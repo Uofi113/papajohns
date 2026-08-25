@@ -26,6 +26,13 @@
                     "image_url": "https://cdn.arora.pro/m/upload/b14c7ed4-5d7f-4715-a030-88dd81cb933f/size-1/5d412078-e3e9-45f6-a6cb-9f5f44c84d4e.jpg"
                 },
                 {
+                    "id": "b635fcb4-7736-46e0-9415-7ffc9dcf16ef",
+                    "name": "Кокосовый суп с манго",
+                    "description": "кокосовое молоко, пюре манго, лайм, соус рыбный, крветка тигровая, огурец, мята, цедра лайма",
+                    "price": 595,
+                    "image_url": "https://cdn.arora.pro/m/upload/b14c7ed4-5d7f-4715-a030-88dd81cb933f/size-1/2627bcad-fe7d-4fba-801c-c7029a5d65a4.jpg"
+                },
+                {
                     "id": "bcb31ef1-0fcf-4618-ab8e-3c9add9a36ff",
                     "name": "Тирамису лимонный",
                     "description": "савоярди, маскарпоне, сливки, яйцо, лимонный сок, ликер лимончело, лимонный курд, лимон",
