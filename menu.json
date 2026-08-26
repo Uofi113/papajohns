@@ -19,6 +19,13 @@
                     "image_url": "https://cdn.arora.pro/m/upload/b14c7ed4-5d7f-4715-a030-88dd81cb933f/size-1/95901d5e-2ba1-4737-9ff7-e15f36cfd145.jpg"
                 },
                 {
+                    "id": "6b6f6fa2-f46b-43a1-9280-3745ee7e2e20",
+                    "name": "Кукурузный крем-суп",
+                    "description": "кукуруза, огурец, кефир, сок лимона, чеснок, укроп, базилик",
+                    "price": 395,
+                    "image_url": "https://cdn.arora.pro/m/upload/b14c7ed4-5d7f-4715-a030-88dd81cb933f/size-1/d16a53a1-532f-4369-8677-0efa7bc4c38c.jpg"
+                },
+                {
                     "id": "9da5d233-4b5a-4cca-9faa-244d7a1ef39e",
                     "name": "Пицца шашлык",
                     "description": "тесто, соус красный, сыр моцарелла, куриное филе, шампиньоны, огурец маринованный, лук маринованный, петрушка",
