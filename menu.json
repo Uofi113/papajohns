@@ -1469,27 +1469,6 @@
                     "image_url": "https://cdn.arora.pro/m/upload/b14c7ed4-5d7f-4715-a030-88dd81cb933f/size-1/ef702ece-6f33-4d2a-aceb-e3276568ae0f.png"
                 },
                 {
-                    "id": "6ad7e7f4-0174-4329-aff2-8285864127ee",
-                    "name": "Маракуйя-Киви лимонад",
-                    "description": "",
-                    "price": 345,
-                    "image_url": "https://cdn.arora.pro/m/upload/b14c7ed4-5d7f-4715-a030-88dd81cb933f/size-1/501f8aba-4f6a-47af-b58b-5b70f9f5a923.png"
-                },
-                {
-                    "id": "c333177b-a151-4fec-abfa-883f59e3adf8",
-                    "name": "Вишня-каламанси лимонад",
-                    "description": "основа для лимонада вишня-коломанси, базилик свежий, вишня с/м, эвервесс лимон лайм, содовая, лед",
-                    "price": 345,
-                    "image_url": "https://cdn.arora.pro/m/upload/b14c7ed4-5d7f-4715-a030-88dd81cb933f/size-1/280fd312-baa8-4526-b90c-1f3e4f7d2045.png"
-                },
-                {
-                    "id": "dfc99a66-0778-4a3a-a9c3-efc1888a9735",
-                    "name": "Лаванда-бергамот лимонад",
-                    "description": "эвервесс лемон лайм, аква минерале, сироп сахарный, сок лимона, сироп лаванда, сироп бергамот, лед, сушеная лаванда",
-                    "price": 345,
-                    "image_url": "https://cdn.arora.pro/m/upload/b14c7ed4-5d7f-4715-a030-88dd81cb933f/size-1/067c854f-eb6a-4751-8207-9a9e297ecb9f.png"
-                },
-                {
                     "id": "fbe4f349-e6b3-4cc2-a981-c42bd101b6f8",
                     "name": "Арбуз-лайм / Лимонад",
                     "description": "",
